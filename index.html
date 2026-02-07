@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 Unit 1: Ultimate Random Quiz</title>
+    <style>
+        :root { --p: #6c5ce7; --bg: #f0f2f5; --txt: #2d3436; --success: #00b894; --danger: #d63031; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); display: flex; justify-content: center; padding: 15px; margin: 0; }
+        .quiz-card { background: white; width: 100%; max-width: 700px; padding: 25px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .progress-container { width: 100%; height: 10px; background: #dfe6e9; border-radius: 5px; margin-bottom: 20px; overflow: hidden; }
+        #progress-bar { height: 100%; background: linear-gradient(90deg, #a29bfe, var(--p)); width: 0%; transition: 0.5s ease; }
+        .category-tag { background: #6c5ce715; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; color: var(--p); text-transform: uppercase; letter-spacing: 1px; }
+        .question-box { background: #f9faff; padding: 30px 20px; border-radius: 15px; margin-bottom: 25px; cursor: pointer; text-align: center; border: 2px solid #edf2ff; transition: 0.3s; position: relative; }
+        .question-box:hover { border-color: var(--p); transform: translateY(-2px); }
+        .question-text { font-size: 32px; font-weight: 800; color: var(--txt); display: block; margin-bottom: 10px; }
+        .speaker-btn { font-size: 28px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 500px) { .options { grid-template-columns: 1fr; } }
+        button.opt { padding: 18px; border: 2px solid #f1f3f5; border-radius: 12px; background: #fff; font-size: 16px; font-weight: 500; cursor: pointer; transition: 0.2s; text-align: left; color: var(--txt); }
+        button.opt:hover:not(:disabled) { border-color: var(--p); background: #f8f9ff; box-shadow: 0 4px 12px rgba(108, 92, 231, 0.1); }
+        .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
+        .wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
+        .footer { margin-top: 30px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid #f8f9fa; padding-top: 20px; }
+        #next-btn { background: var(--txt); color: white; border: none; padding: 14px 40px; border-radius: 12px; cursor: pointer; font-weight: bold; display: none; font-size: 16px; }
+        #score-info { font-weight: 800; font-size: 20px; color: var(--p); }
+    </style>
+</head>
+<body>
+
+<div class="quiz-card">
+    <div class="header">
+        <span id="category" class="category-tag">Loading...</span>
+        <span id="counter" style="font-weight: 600; color: #b2bec3;">0 / 90</span>
+    </div>
+    <div class="progress-container"><div id="progress-bar"></div></div>
+    
+    <div id="quiz-area">
+        <div class="question-box" onclick="speakWord()">
+            <span id="q-text" class="question-text">Word</span>
+            <div class="speaker-btn">🔊</div>
+            <div style="font-size: 12px; color: #a29bfe; font-weight: 600; margin-top: 10px;">ESHTISH UCHUN BOSING</div>
+        </div>
+        
+        <div id="options" class="options"></div>
+        
+        <div class="footer">
+            <div id="score-info">Score: 0</div>
+            <button id="next-btn" onclick="nextQuestion()">KEYINGISI &rarr;</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const dictionary = [
+        // Topic Vocabulary
+        {q: "Beat", a: "Yutmoq, mag'lub qilmoq", c: "Topic Vocabulary", o: ["Yutmoq, mag'lub qilmoq", "Sudya", "Murabbiy", "Jamoa"]},
+        {q: "Board game", a: "Taxtali o'yin", c: "Topic Vocabulary", o: ["Taxtali o'yin", "Video o'yin", "Musiqa", "Guruh"]},
+        {q: "Captain", a: "Kapitan", c: "Topic Vocabulary", o: ["Kapitan", "Raqib", "Muxlis", "A'zo"]},
+        {q: "Challenge", a: "Da'vat etmoq", c: "Topic Vocabulary", o: ["Da'vat etmoq", "Aldamoq", "Yayramoq", "Yutmoq"]},
+        {q: "Champion", a: "Chempion", c: "Topic Vocabulary", o: ["Chempion", "Sardor", "Hakam", "Murabbiy"]},
+        {q: "Cheat", a: "Aldamoq", c: "Topic Vocabulary", o: ["Aldamoq", "Shug'ullanmoq", "Yordam bermoq", "Qiziqmoq"]},
+        {q: "Classical music", a: "Klassik musiqa", c: "Topic Vocabulary", o: ["Klassik musiqa", "Xalq qo'shig'i", "Ritm", "Klub"]},
+        {q: "Club", a: "Klub", c: "Topic Vocabulary", o: ["Klub", "Jamoa", "Guruh", "Zal"]},
+        {q: "Coach", a: "Murabbiy", c: "Topic Vocabulary", o: ["Murabbiy", "O'yinchi", "Hakam", "Sardor"]},
+        {q: "Competition", a: "Musobaqa", c: "Topic Vocabulary", o: ["Musobaqa", "Konsert", "Mashg'ulot", "Natija"]},
+        {q: "Concert", a: "Konsert", c: "Topic Vocabulary", o: ["Konsert", "Sahnada", "Klub", "Musiqa"]},
+        {q: "Defeat", a: "Mag'lub qilmoq", c: "Topic Vocabulary", o: ["Mag'lub qilmoq", "G'alaba qozonmoq", "Tashkillashtirmoq", "Qatnashmoq"]},
+        {q: "Entertaining", a: "Ko'ngilochar", c: "Topic Vocabulary", o: ["Ko'ngilochar", "Zerikarli", "Foydali", "Qiyin"]},
+        {q: "Folk music", a: "Xalq qo'shig'i", c: "Topic Vocabulary", o: ["Xalq qo'shig'i", "Klassik musiqa", "Ritm", "Zamonaviy"]},
+        {q: "Group", a: "Guruh", c: "Topic Vocabulary", o: ["Guruh", "Jamoa", "A'zo", "Sardor"]},
+        {q: "Gym", a: "Zal", c: "Topic Vocabulary", o: ["Zal", "Maydon", "Bog'", "Maktab"]},
+        {q: "Have fun", a: "Yayramoq", c: "Topic Vocabulary", o: ["Yayramoq", "Ishlamoq", "Zerikmoq", "Uxlamaq"]},
+        {q: "Interest", a: "Qiziqmoq, qiziqish", c: "Topic Vocabulary", o: ["Qiziqmoq, qiziqish", "Rohat", "Tavakkal", "Natija"]},
+        {q: "Member", a: "A'zo", c: "Topic Vocabulary", o: ["A'zo", "Raqib", "Kapitan", "Hakam"]},
+        {q: "Opponent", a: "Raqib", c: "Topic Vocabulary", o: ["Raqib", "Jamoadosh", "Muxlis", "Murabbiy"]},
+        {q: "Organise", a: "Tashkillashtirmoq", c: "Topic Vocabulary", o: ["Tashkillashtirmoq", "Buzmoq", "Kutmoq", "Yashirmoq"]},
+        {q: "Pleasure", a: "Rohat", c: "Topic Vocabulary", o: ["Rohat", "Og'riq", "Qiyinchilik", "Natija"]},
+        {q: "Referee", a: "Sudya, hakam", c: "Topic Vocabulary", o: ["Sudya, hakam", "O'yinchi", "Sardor", "Muxlis"]},
+        {q: "Rhythm", a: "Ritm", c: "Topic Vocabulary", o: ["Ritm", "Kuy", "Ovoz", "Konsert"]},
+        {q: "Risk", a: "Tavakkal qilmoq", c: "Topic Vocabulary", o: ["Tavakkal qilmoq", "Qo'rqmoq", "Yutmoq", "Saqlamoq"]},
+        {q: "Score", a: "Natija ko'rsatmoq", c: "Topic Vocabulary", o: ["Natija ko'rsatmoq", "O'ynamoq", "Yo'qotmoq", "Jamoa"]},
+        {q: "Support", a: "Qo'llab-quvvatlamoq", c: "Topic Vocabulary", o: ["Qo'llab-quvvatlamoq", "Aldamoq", "Chetlatmoq", "Sotmoq"]},
+        {q: "Team", a: "Jamoa", c: "Topic Vocabulary", o: ["Jamoa", "Guruh", "Klub", "A'zo"]},
+        {q: "Train", a: "Shug'ullanmoq", c: "Topic Vocabulary", o: ["Shug'ullanmoq", "O'ynamoq", "Dam olmoq", "Yugurmoq"]},
+        {q: "Video game", a: "Video o'yin", c: "Topic Vocabulary", o: ["Video o'yin", "Taxtali o'yin", "Karta", "Sport"]},
+
+        // Phrasal Verbs
+        {q: "Carry on", a: "Davom etmoq", c: "Phrasal Verbs", o: ["Davom etmoq", "To'xtatmoq", "Boshlamoq", "Pasaytirmoq"]},
+        {q: "Eat out", a: "Restoranda ovqatlanmoq", c: "Phrasal Verbs", o: ["Restoranda ovqatlanmoq", "Uyda ovqatlanmoq", "Sotib olmoq", "Pishirmoq"]},
+        {q: "Give up", a: "To'xtatmoq", c: "Phrasal Verbs", o: ["To'xtatmoq", "Boshlamoq", "Davom ettirmoq", "Qo'shilmoq"]},
+        {q: "Join in", a: "Qo'shilmoq", c: "Phrasal Verbs", o: ["Qo'shilmoq", "Chiqmoq", "Kuzatmoq", "To'xtatmoq"]},
+        {q: "Send off", a: "Chetlatmoq", c: "Phrasal Verbs", o: ["Chetlatmoq", "Chaqirmoq", "Maqtamoq", "Yutmoq"]},
+        {q: "Take up", a: "Boshlamoq (hobby)", c: "Phrasal Verbs", o: ["Boshlamoq (hobby)", "Tugatmoq", "Davom etmoq", "Sotmoq"]},
+        {q: "Turn down", a: "Pasaytirmoq", c: "Phrasal Verbs", o: ["Pasaytirmoq", "Ko'tarmoq", "Yoqmoq", "O'chirmoq"]},
+        {q: "Turn up", a: "Ko'tarmoq", c: "Phrasal Verbs", o: ["Ko'tarmoq", "Pasaytirmoq", "Yo'qotmoq", "O'chirmoq"]},
+
+        // Phrases
+        {q: "For a long time", a: "Ko'p vaqtdan beri", c: "Phrases", o: ["Ko'p vaqtdan beri", "Hozir", "Tezda", "Ertaga"]},
+        {q: "For fun", a: "Ko'ngilxushlik uchun", c: "Phrases", o: ["Ko'ngilxushlik uchun", "Pul uchun", "Ish uchun", "Majburan"]},
+        {q: "In the middle of", a: "...ning o'rtasida", c: "Phrases", o: ["...ning o'rtasida", "...ning tepasida", "...ning yonida", "...ning ostida"]},
+        {q: "In time (for)", a: "...uchun vaqtida", c: "Phrases", o: ["...uchun vaqtida", "Kechikib", "Erta", "Hozir"]},
+        {q: "On CD/DVD/video", a: "CD/DVD/videoda", c: "Phrases", o: ["CD/DVD/videoda", "Sahnada", "Zalda", "Kitobda"]},
+        {q: "On stage", a: "Sahnada", c: "Phrases", o: ["Sahnada", "Zalda", "Ko'chada", "Xonada"]},
+
+        // Word Formation
+        {q: "Act", a: "Harakat qilmoq", c: "Word Formation", o: ["Harakat qilmoq", "Aktyor", "Bola", "Dengizchi"]},
+        {q: "Action", a: "Harakat", c: "Word Formation", o: ["Harakat", "Faol", "Qahramon", "Musiqa"]},
+        {q: "Active", a: "Faol", c: "Word Formation", o: ["Faol", "Nofaol", "Aktyor", "Bola"]},
+        {q: "Inactive", a: "Nofaol", c: "Word Formation", o: ["Nofaol", "Faol", "Harakatli", "Atlet"]},
+        {q: "Actor", a: "Aktyor", c: "Word Formation", o: ["Aktyor", "Dengizchi", "Qo'shiqchi", "Murabbiy"]},
+        {q: "Athlete", a: "Atlet", c: "Word Formation", o: ["Atlet", "Hakam", "Raqib", "Sardor"]},
+        {q: "Athletic", a: "Atletik", c: "Word Formation", o: ["Atletik", "Atletika", "Aktyorlik", "Bolalik"]},
+        {q: "Athletics", a: "Atletika", c: "Word Formation", o: ["Atletika", "Atlet", "Kolleksiya", "O'yin"]},
+        {q: "Child", a: "Bola", c: "Word Formation", o: ["Bola", "Bolalar", "Bolalik", "Oila"]},
+        {q: "Children", a: "Bolalar", c: "Word Formation", o: ["Bolalar", "Bola", "Ota-ona", "Bolalik"]},
+        {q: "Childhood", a: "Bolalik", c: "Word Formation", o: ["Bolalik", "Bola", "Yoshlik", "Bolalar"]},
+        {q: "Collect", a: "Yig'moq", c: "Word Formation", o: ["Yig'moq", "Sotmoq", "Buzmoq", "Harakat"]},
+        {q: "Collection", a: "Kolleksiya", c: "Word Formation", o: ["Kolleksiya", "Yig'uvchi", "Musiqa", "Harakat"]},
+        {q: "Collector", a: "Yig'uvchi", c: "Word Formation", o: ["Yig'uvchi", "Kolleksiya", "Aktyor", "Dengizchi"]},
+        {q: "Entertain", a: "Ko'ngilxushlik qilmoq", c: "Word Formation", o: ["Ko'ngilxushlik qilmoq", "Zeriktirmoq", "Yugurmoq", "Shug'ullanmoq"]},
+        {q: "Entertainment", a: "Ko'ngilxushlik", c: "Word Formation", o: ["Ko'ngilxushlik", "Musobaqa", "Mashg'ulot", "Kolleksiya"]},
+        {q: "Hero", a: "Qahramon", c: "Word Formation", o: ["Qahramon", "Aktyor", "Muxlis", "Raqib"]},
+        {q: "Heroic", a: "Qahramonlarcha", c: "Word Formation", o: ["Qahramonlarcha", "Qahramon", "Qo'rqoq", "Sardor"]},
+        {q: "Heroine", a: "Qahramon ayol", c: "Word Formation", o: ["Qahramon ayol", "Qahramon", "Aktrisa", "Sardor"]},
+        {q: "Music", a: "Musiqa", c: "Word Formation", o: ["Musiqa", "Musiqiy", "Musiqachi", "Ritm"]},
+        {q: "Musical", a: "Musiqiy", c: "Word Formation", o: ["Musiqiy", "Musiqachi", "Musiqa", "Ritmik"]},
+        {q: "Musician", a: "Musiqachi", c: "Word Formation", o: ["Musiqachi", "Musiqiy", "Musiqa", "Ritmik"]},
+        {q: "Play", a: "O'ynamoq", c: "Word Formation", o: ["O'ynamoq", "O'yinchi", "O'yinqaroq", "Harakat"]},
+        {q: "Player", a: "O'yinchi", c: "Word Formation", o: ["O'yinchi", "Murabbiy", "Muxlis", "Hakam"]},
+        {q: "Playful", a: "O'yinqaroq", c: "Word Formation", o: ["O'yinqaroq", "O'yinchi", "O'yin", "Harakat"]},
+        {q: "Sail", a: "Suzmoq", c: "Word Formation", o: ["Suzmoq", "Kema", "Dengiz", "Dengizchi"]},
+        {q: "Sailing", a: "Suzish/dengiz safari", c: "Word Formation", o: ["Suzish/dengiz safari", "Dengizchi", "Kema", "Baliq ovlash"]},
+        {q: "Sailor", a: "Dengizchi", c: "Word Formation", o: ["Dengizchi", "Suzuvchi", "Aktyor", "Uchuvchi"]},
+        {q: "Sing", a: "Kuylamoq", c: "Word Formation", o: ["Kuylamoq", "Qo'shiq", "Qo'shiqchi", "Kuy"]},
+        {q: "Sang", a: "Sing (o'tgan zamon)", c: "Word Formation", o: ["Sing (o'tgan zamon)", "Sing (hozirgi)", "Qo'shiq", "Kuylash"]},
+        {q: "Sung", a: "Sing (past participle)", c: "Word Formation", o: ["Sing (past participle)", "Sing (o'tgan)", "Qo'shiq", "Kuy"]},
+        {q: "Song", a: "Kuy/Qo'shiq", c: "Word Formation", o: ["Kuy/Qo'shiq", "Kuylamoq", "Qo'shiqchi", "Musiqachi"]},
+        {q: "Singer", a: "Qo'shiqchi", c: "Word Formation", o: ["Qo'shiqchi", "Shoir", "Aktyor", "Raqqos"]},
+        {q: "Singing", a: "Kuylash", c: "Word Formation", o: ["Kuylash", "Qo'shiq", "Kuy", "Musiqa"]},
+
+        // Word Patterns
+        {q: "Bored with", a: "...dan zerikkan", c: "Word Patterns", o: ["...dan zerikkan", "...ga qiziqqan", "...dan qo'rqqan", "...bilan mashhur"]},
+        {q: "Crazy about", a: "...ning ashaddiymuhlisi", c: "Word Patterns", o: ["...ning ashaddiymuhlisi", "...dan nafratlanadigan", "...ga befarq", "...ni unutgan"]},
+        {q: "Good at", a: "...da yaxshi", c: "Word Patterns", o: ["...da yaxshi", "...da yomon", "...dan zerikkan", "...ga qiziqqan"]},
+        {q: "Interested in", a: "...ga qiziqmoq", c: "Word Patterns", o: ["...ga qiziqmoq", "...dan zerikmoq", "...ni yomon ko'rmoq", "...dan qochmoq"]},
+        {q: "Keen on", a: "...ga qiziqmoq", c: "Word Patterns", o: ["...ga qiziqmoq", "...ni unutmoq", "...dan zerikmoq", "...dan qo'rqmoq"]},
+        {q: "Popular with", a: "...bilan mashhur", c: "Word Patterns", o: ["...bilan mashhur", "...dan zerikkan", "...ga qarshi", "...dan uzoq"]},
+        {q: "Feel like", a: "Xohlamoq", c: "Word Patterns", o: ["Xohlamoq", "Sezmoq", "Yig'lamoq", "Kulmoq"]},
+        {q: "Listen to", a: "Tinglamoq", c: "Word Patterns", o: ["Tinglamoq", "Gapirmoq", "Qatnashmoq", "Xohlamoq"]},
+        {q: "Take part in", a: "Qatnashmoq", c: "Word Patterns", o: ["Qatnashmoq", "Kuzatmoq", "Boshlamoq", "Tugatmoq"]},
+        {q: "A book by sb about", a: "...haqida kitob", c: "Word Patterns", o: ["...haqida kitob", "...ning muhlisi", "...ga qarshi", "...ning o'yini"]},
+        {q: "A fan of", a: "...ning muhlisi", c: "Word Patterns", o: ["...ning muhlisi", "...ning raqibi", "...ning dushmani", "...ning murabbiyi"]},
+        {q: "A game against", a: "...ga qarshi o'yin", c: "Word Patterns", o: ["...ga qarshi o'yin", "...bilan o'yin", "...haqida o'yin", "...uchun o'yin"]}
+    ];
+
+    let quiz = [];
+    let current = 0;
+    let score = 0;
+
+    // Fisher-Yates shuffle algoritmi
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function init() {
+        quiz = shuffle([...dictionary]); // Savollarni aralashtirish
+        render();
+    }
+
+    function render() {
+        const item = quiz[current];
+        document.getElementById('category').innerText = item.c;
+        document.getElementById('counter').innerText = `${current + 1} / ${quiz.length}`;
+        document.getElementById('q-text').innerText = item.q;
+        document.getElementById('progress-bar').style.width = `${(current / quiz.length) * 100}%`;
+        
+        const optBox = document.getElementById('options');
+        optBox.innerHTML = '';
+        
+        // Javob variantlarini ham aralashtirish
+        const shuffledOptions = shuffle([...item.o]);
+        shuffledOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'opt';
+            btn.innerText = opt;
+            btn.onclick = () => check(btn, opt, item.a);
+            optBox.appendChild(btn);
+        });
+        document.getElementById('next-btn').style.display = 'none';
+    }
+
+    function speakWord() {
+        const word = quiz[current].q;
+        const cleanWord = word.replace(/\(.*\)/g, "").replace(/\//g, " and "); 
+        const utterance = new SpeechSynthesisUtterance(cleanWord);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function check(btn, selected, correct) {
+        const btns = document.querySelectorAll('.options button');
+        btns.forEach(b => b.disabled = true);
+        
+        if(selected === correct) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            btns.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
+        }
+        document.getElementById('score-info').innerText = `Ball: ${score}`;
+        document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        current++;
+        if(current < quiz.length) {
+            render();
+        } else {
+            const pct = Math.round((score/quiz.length)*100);
+            document.getElementById('quiz-area').innerHTML = `
+                <div style="text-align:center; padding: 20px;">
+                    <h2 style="color:var(--txt)">MARRA!</h2>
+                    <p>90 ta so'zni hammasini ko'rib chiqdingiz.</p>
+                    <h1 style="color:var(--p); font-size:75px; margin: 15px 0;">${pct}%</h1>
+                    <p style="font-size:20px; font-weight:bold;">${score} ta to'g'ri / ${quiz.length}</p>
+                    <button onclick="location.reload()" style="width:100%; background:var(--p); color:white; border:none; padding:18px; border-radius:15px; cursor:pointer; font-size:18px; font-weight:bold; margin-top:20px; box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);">YANA BOSHLASH (ARALASHIB KETADI)</button>
+                </div>`;
+            document.getElementById('progress-bar').style.width = `100%`;
+        }
+    }
+
+    init();
+</script>
+</body>
+</html>
