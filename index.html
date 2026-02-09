@@ -3,27 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vocabulary Pro v2.4 - Sound Fixed</title>
+    <title>Vocabulary Pro v2.5</title>
     <style>
         :root { --p: #00b894; --bg: #f2f2f7; --txt: #1c1c1e; --success: #34c759; --danger: #ff3b30; --secondary: #8e8e93; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 15px; }
-        .quiz-card { background: white; width: 100%; max-width: 450px; padding: 20px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; min-height: 520px; margin-top: 20px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
+        .quiz-card { background: white; width: 100%; max-width: 500px; padding: 25px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); display: flex; flex-direction: column; min-height: 520px; position: relative; }
         #start-screen { text-align: center; margin: auto 0; }
-        .mode-btn { width: 100%; padding: 20px; margin: 12px 0; border: none; border-radius: 18px; background: #f1f3f5; font-size: 18px; font-weight: 700; cursor: pointer; color: var(--txt); }
+        .mode-btn { width: 100%; padding: 18px; margin: 10px 0; border: none; border-radius: 16px; background: #f1f3f5; font-size: 17px; font-weight: 700; cursor: pointer; color: var(--txt); transition: 0.2s; }
+        .mode-btn:active { background: #e5e5ea; transform: scale(0.98); }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .category-tag { background: #00b89415; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; color: var(--p); text-transform: uppercase; }
+        .category-tag { background: #00b89415; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; color: var(--p); text-transform: uppercase; }
         .progress-bar { width: 100%; height: 6px; background: #e5e5ea; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
-        #progress { height: 100%; background: var(--p); width: 0%; transition: 0.3s; }
+        #progress { height: 100%; background: var(--p); width: 0%; transition: 0.4s ease; }
         .question-box { text-align: center; margin-bottom: 25px; }
-        .question-text { font-size: 26px; font-weight: 800; color: var(--txt); }
-        .options { display: grid; gap: 12px; width: 100%; }
-        .opt { padding: 18px; border: 2px solid #f2f2f7; border-radius: 16px; background: white; font-size: 16px; font-weight: 600; color: var(--txt); text-align: center; width: 100%; cursor: pointer; }
+        .question-text { font-size: 24px; font-weight: 800; color: var(--txt); }
+        .options { display: grid; gap: 10px; width: 100%; }
+        .opt { padding: 16px; border: 2px solid #f2f2f7; border-radius: 14px; background: white; font-size: 16px; font-weight: 600; cursor: pointer; color: var(--txt); text-align: center; }
         .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
         .wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
-        .footer { margin-top: auto; padding-top: 25px; }
-        .btn-container { display: flex; gap: 10px; height: 55px; }
-        .action-btn { flex: 1; border-radius: 14px; font-weight: 700; font-size: 15px; cursor: pointer; border: none; }
+        .footer { margin-top: auto; padding-top: 20px; }
+        .btn-container { display: flex; gap: 10px; height: 50px; }
+        .action-btn { flex: 1; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; border: none; }
         #next-btn { background: var(--txt); color: white; display: none; }
     </style>
 </head>
@@ -31,8 +32,8 @@
 
 <div class="quiz-card">
     <div id="start-screen">
-        <h1 style="margin:0;">Unit 1 Test</h1>
-        <p style="color: var(--secondary); margin-bottom: 30px;">Ovoz ishlashi uchun bosing</p>
+        <h1>Unit 1 Test</h1>
+        <p style="color: var(--secondary);">Rejimni tanlang</p>
         <button class="mode-btn" onclick="startQuiz('uz-en')">O'zbekcha ➔ Inglizcha</button>
         <button class="mode-btn" onclick="startQuiz('en-uz')">Inglizcha ➔ O'zbekcha</button>
     </div>
@@ -40,11 +41,10 @@
     <div id="quiz-area" style="display: none; height: 100%; flex-direction: column;">
         <div class="header">
             <span id="category" class="category-tag">...</span>
-            <span id="counter" style="font-size:13px; color:var(--secondary);">0 / 0</span>
+            <span id="counter" style="font-size: 13px; color: var(--secondary);">0 / 0</span>
         </div>
         <div class="progress-bar"><div id="progress"></div></div>
         <div class="question-box">
-            <div style="font-size:10px; font-weight:800; color:var(--secondary);">TOPING:</div>
             <div id="q-text" class="question-text">...</div>
         </div>
         <div id="options" class="options"></div>
@@ -52,7 +52,7 @@
             <div id="score-info" style="text-align:center; font-weight:700; margin-bottom:10px;">Ball: 0</div>
             <div class="btn-container">
                 <button class="action-btn" style="background:#fff; color:var(--danger); border:2px solid var(--danger);" onclick="location.reload()">Chiqish</button>
-                <button id="next-btn" class="action-btn" onclick="nextQuestion()">Keyingisi &rarr;</button>
+                <button id="next-btn" class="action-btn" onclick="nextQuestion()">Keyingisi</button>
             </div>
         </div>
     </div>
@@ -108,16 +108,15 @@
     ];
 
     let quiz = [], current = 0, score = 0, mode = '', answered = false;
-    let synth = window.speechSynthesis;
 
-    // MUHIM: Mobil ovoz uchun "soxta" start
-    function forceVoice() {
-        const u = new SpeechSynthesisUtterance(" ");
-        synth.speak(u);
+    // Mobil ovozni "uyg'otuvchi" funksiya
+    function wakeUpVoice() {
+        const msg = new SpeechSynthesisUtterance(" ");
+        window.speechSynthesis.speak(msg);
     }
 
     function startQuiz(m) {
-        forceVoice(); // Ovoz tizimini uyg'otish
+        wakeUpVoice(); // Birinchi klikda ovozni uyg'otamiz
         mode = m;
         score = 0; current = 0;
         document.getElementById('start-screen').style.display = 'none';
@@ -149,9 +148,7 @@
             const b = document.createElement('button');
             b.className = 'opt';
             b.innerText = o;
-            b.addEventListener('click', () => {
-                if(!answered) check(b, o, correctVal, item.en);
-            });
+            b.onclick = () => { if(!answered) check(b, o, correctVal, item.en); };
             optBox.appendChild(b);
         });
         document.getElementById('next-btn').style.display = 'none';
@@ -162,12 +159,12 @@
         const all = document.querySelectorAll('.opt');
         all.forEach(x => x.style.pointerEvents = 'none');
 
-        // Ovoz berish qismi (Mobil uchun optimallashtirilgan)
-        synth.cancel();
-        const utterance = new SpeechSynthesisUtterance(english);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.8; // Sal sekinroq va aniqroq
-        synth.speak(utterance);
+        // Ovoz berish qismi
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(english);
+        u.lang = 'en-US';
+        u.rate = 0.8;
+        window.speechSynthesis.speak(u);
 
         if(selected === correct) {
             btn.classList.add('correct');
@@ -176,7 +173,6 @@
             btn.classList.add('wrong');
             all.forEach(x => { if(x.innerText === correct) x.classList.add('correct'); });
         }
-        
         document.getElementById('score-info').innerText = `Ball: ${score}`;
         document.getElementById('next-btn').style.display = 'block';
     }
@@ -188,9 +184,9 @@
             const p = Math.round((score/quiz.length)*100);
             document.getElementById('quiz-area').innerHTML = `
                 <div style="text-align:center; margin: auto 0;">
-                    <h2 style="color:var(--p); font-size:60px; margin:0;">${p}%</h2>
+                    <h1 style="color:var(--p); font-size:60px; margin:0;">${p}%</h1>
                     <p style="font-weight:700;">To'g'ri: ${score} / ${quiz.length}</p>
-                    <button class="mode-btn" onclick="location.reload()" style="background:var(--p); color:white;">Bosh menyu</button>
+                    <button class="mode-btn" onclick="location.reload()" style="background:var(--p); color:white;">Boshiga qaytish</button>
                 </div>`;
         }
     }
