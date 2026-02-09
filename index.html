@@ -3,45 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vocabulary Pro v2.6</title>
+    <title>VocabPhone Pro</title>
     <style>
         :root { --p: #00b894; --bg: #f2f2f7; --txt: #1c1c1e; --success: #34c759; --danger: #ff3b30; --secondary: #8e8e93; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; justify-content: center; }
-        .quiz-card { background: white; width: 100%; max-width: 450px; padding: 20px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); min-height: 520px; display: flex; flex-direction: column; }
+        
+        /* Telefon uchun maxsus: teginishdagi effektlarni o'chirish */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; justify-content: center; }
+
+        .quiz-card { 
+            background: white; width: 100%; max-width: 450px; padding: 20px; 
+            border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            min-height: 90vh; display: flex; flex-direction: column; 
+        }
+
         #start-screen, .result-box { text-align: center; margin: auto 0; }
-        .mode-btn { width: 100%; padding: 18px; margin: 10px 0; border: none; border-radius: 16px; background: #f1f3f5; font-size: 17px; font-weight: 700; cursor: pointer; }
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        .category-tag { background: #00b89415; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; color: var(--p); }
-        .progress-bar { width: 100%; height: 6px; background: #e5e5ea; border-radius: 3px; margin: 10px 0; overflow: hidden; }
-        #progress { height: 100%; background: var(--p); width: 0%; transition: 0.3s; }
-        .question-text { font-size: 26px; font-weight: 800; text-align: center; margin: 25px 0; color: var(--txt); }
-        .options { display: grid; gap: 10px; }
-        .opt { padding: 16px; border: 2px solid #f2f2f7; border-radius: 14px; background: white; font-size: 16px; font-weight: 600; cursor: pointer; }
-        .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
+        
+        .mode-btn { 
+            width: 100%; padding: 20px; margin: 12px 0; border: none; 
+            border-radius: 20px; background: #f1f3f5; font-size: 18px; 
+            font-weight: 700; cursor: pointer; color: var(--txt);
+        }
+        .mode-btn:active { background: #e2e6ea; transform: scale(0.97); }
+
+        .progress-bar { width: 100%; height: 8px; background: #e5e5ea; border-radius: 4px; margin: 15px 0; overflow: hidden; }
+        #progress { height: 100%; background: var(--p); width: 0%; transition: 0.4s cubic-bezier(0.1, 0.7, 0.1, 1); }
+
+        .question-text { font-size: 28px; font-weight: 800; text-align: center; margin: 30px 0; color: var(--txt); min-height: 70px; display: flex; align-items: center; justify-content: center;}
+
+        .options { display: grid; gap: 12px; }
+        .opt { 
+            padding: 18px; border: 2px solid #f2f2f7; border-radius: 18px; 
+            background: white; font-size: 17px; font-weight: 600; cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; transform: scale(1.02); }
         .wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
+
         .footer { margin-top: auto; padding-top: 20px; }
-        .score-info { text-align: center; font-weight: 700; color: var(--secondary); margin-bottom: 15px; }
+        .score-info { text-align: center; font-weight: 700; color: var(--secondary); margin-bottom: 15px; font-size: 18px; }
+        
         .btn-group { display: flex; gap: 10px; }
-        #next-btn { flex: 2; padding: 16px; border-radius: 14px; background: var(--txt); color: white; font-weight: 700; border: none; display: none; cursor: pointer; }
-        #finish-btn { flex: 1; padding: 16px; border-radius: 14px; background: white; color: var(--danger); border: 2px solid var(--danger); font-weight: 700; cursor: pointer; }
-        .result-pct { font-size: 55px; font-weight: 900; color: var(--p); margin: 10px 0; }
+        #next-btn { flex: 2; padding: 18px; border-radius: 16px; background: var(--txt); color: white; font-weight: 700; border: none; display: none; font-size: 16px; }
+        #finish-btn { flex: 1; padding: 18px; border-radius: 16px; background: #fff; color: var(--danger); border: 2px solid var(--danger); font-weight: 700; font-size: 14px; }
+        
+        .result-pct { font-size: 65px; font-weight: 900; color: var(--p); margin: 10px 0; }
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
     <div id="start-screen">
-        <h1>Unit 1 Test</h1>
-        <p style="color: var(--secondary);">Rejimni tanlang</p>
-        <button class="mode-btn" onclick="startQuiz('uz-en')">O'zbekcha ➔ Inglizcha</button>
-        <button class="mode-btn" onclick="startQuiz('en-uz')">Inglizcha ➔ O'zbekcha</button>
+        <h1 style="font-size: 32px; margin-bottom: 5px;">English Unit 1</h1>
+        <p style="color: var(--secondary); margin-bottom: 30px;">Ovozni eshitish uchun rejimni tanlang</p>
+        <button class="mode-btn" onclick="startQuiz('uz-en')">O'zbekcha ➔ Inglizcha 🔊</button>
+        <button class="mode-btn" onclick="startQuiz('en-uz')">Inglizcha ➔ O'zbekcha 🔊</button>
     </div>
 
     <div id="quiz-area" style="display: none; flex-direction: column; flex-grow: 1;">
-        <div class="header">
-            <span id="category" class="category-tag">...</span>
-            <span id="counter" style="font-size: 13px; font-weight: 600; color: var(--secondary);">0/0</span>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span id="category" style="font-size: 12px; font-weight: 800; color: var(--p); text-transform: uppercase;">...</span>
+            <span id="counter" style="font-size: 14px; font-weight: 700; color: var(--secondary);">0/0</span>
         </div>
         <div class="progress-bar"><div id="progress"></div></div>
         
@@ -60,64 +84,35 @@
 
 <script>
     const dictionary = [
-        {en: "beat", uz: "yutmoq, mag'lub qilmoq", c: "Topic Vocabulary"}, {en: "board game", uz: "taxtali o'yin", c: "Topic Vocabulary"},
-        {en: "captain", uz: "kapitan", c: "Topic Vocabulary"}, {en: "challenge", uz: "da'vat etmoq", c: "Topic Vocabulary"},
-        {en: "champion", uz: "chempion", c: "Topic Vocabulary"}, {en: "cheat", uz: "aldamoq", c: "Topic Vocabulary"},
-        {en: "classical music", uz: "klassik musiqa", c: "Topic Vocabulary"}, {en: "club", uz: "klub", c: "Topic Vocabulary"},
-        {en: "coach", uz: "murabbiy", c: "Topic Vocabulary"}, {en: "competition", uz: "musobaqa", c: "Topic Vocabulary"},
-        {en: "concert", uz: "konsert", c: "Topic Vocabulary"}, {en: "defeat", uz: "mag'lub qilmoq", c: "Topic Vocabulary"},
-        {en: "entertaining", uz: "ko'ngilochar", c: "Topic Vocabulary"}, {en: "folk music", uz: "xalq qo'shig'i", c: "Topic Vocabulary"},
-        {en: "group", uz: "guruh", c: "Topic Vocabulary"}, {en: "gym", uz: "zal", c: "Topic Vocabulary"},
-        {en: "have fun", uz: "yayramoq", c: "Topic Vocabulary"}, {en: "interest", uz: "qiziqmoq, qiziqish", c: "Topic Vocabulary"},
-        {en: "member", uz: "a'zo", c: "Topic Vocabulary"}, {en: "opponent", uz: "raqib", c: "Topic Vocabulary"},
-        {en: "organise", uz: "tashkillashtirmoq", c: "Topic Vocabulary"}, {en: "pleasure", uz: "rohat", c: "Topic Vocabulary"},
-        {en: "referee", uz: "sudya, hakam", c: "Topic Vocabulary"}, {en: "rhythm", uz: "ritm", c: "Topic Vocabulary"},
-        {en: "risk", uz: "tavakkal qilmoq", c: "Topic Vocabulary"}, {en: "score", uz: "natija ko’rsatmoq", c: "Topic Vocabulary"},
-        {en: "support", uz: "qo'llab-quvatlamoq", c: "Topic Vocabulary"}, {en: "team", uz: "jamoa", c: "Topic Vocabulary"},
-        {en: "train", uz: "shug'ullanmoq", c: "Topic Vocabulary"}, {en: "video game", uz: "video o'yin", c: "Topic Vocabulary"},
+        {en: "beat", uz: "yutmoq, mag'lub qilmoq", c: "Vocabulary"}, {en: "board game", uz: "taxtali o'yin", c: "Vocabulary"},
+        {en: "captain", uz: "kapitan", c: "Vocabulary"}, {en: "challenge", uz: "da'vat etmoq", c: "Vocabulary"},
+        {en: "champion", uz: "chempion", c: "Vocabulary"}, {en: "cheat", uz: "aldamoq", c: "Vocabulary"},
+        {en: "coach", uz: "murabbiy", c: "Vocabulary"}, {en: "competition", uz: "musobaqa", c: "Vocabulary"},
+        {en: "concert", uz: "konsert", c: "Vocabulary"}, {en: "defeat", uz: "mag'lub qilmoq", c: "Vocabulary"},
         {en: "carry on", uz: "davom etmoq", c: "Phrasal Verbs"}, {en: "eat out", uz: "restoranda ovqatlanmoq", c: "Phrasal Verbs"},
         {en: "give up", uz: "to'xtatmoq", c: "Phrasal Verbs"}, {en: "join in", uz: "qo'shilmoq", c: "Phrasal Verbs"},
-        {en: "send off", uz: "chetlatmoq (o'yindan)", c: "Phrasal Verbs"}, {en: "take up", uz: "boshlamoq (sport/hobby)", c: "Phrasal Verbs"},
-        {en: "turn down", uz: "pasaytirmoq (ovozni)", c: "Phrasal Verbs"}, {en: "turn up", uz: "ko'tarmoq (ovozni)", c: "Phrasal Verbs"},
-        {en: "for a long time", uz: "ko'p vaqtdan beri", c: "Phrases"}, {en: "for fun", uz: "ko'ngilxushlik uchun", c: "Phrases"},
-        {en: "in the middle (of)", uz: "...ning o'rtasida", c: "Phrases"}, {en: "in time (for)", uz: "...uchun vaqtida", c: "Phrases"},
-        {en: "on CD/DVD/video", uz: "CD/DVD/videoda", c: "Phrases"}, {en: "on stage", uz: "sahnada", c: "Phrases"},
-        {en: "act", uz: "harakat qilmoq", c: "Word Formation"}, {en: "action", uz: "harakat", c: "Word Formation"},
-        {en: "(in)active", uz: "(no)faol", c: "Word Formation"}, {en: "actor", uz: "aktyor", c: "Word Formation"},
-        {en: "athlete", uz: "atlet", c: "Word Formation"}, {en: "athletic", uz: "atletik", c: "Word Formation"},
-        {en: "athletics", uz: "atletika", c: "Word Formation"}, {en: "child", uz: "bola", c: "Word Formation"},
-        {en: "children", uz: "bolalar", c: "Word Formation"}, {en: "childhood", uz: "bolalik", c: "Word Formation"},
-        {en: "collect", uz: "yig'moq", c: "Word Formation"}, {en: "collection", uz: "kolleksiya", c: "Word Formation"},
-        {en: "collector", uz: "yig'uvchi", c: "Word Formation"}, {en: "entertain", uz: "ko'ngilxushlik qilmoq", c: "Word Formation"},
-        {en: "entertainment", uz: "ko'ngilxushlik", c: "Word Formation"}, {en: "hero", uz: "qahramon", c: "Word Formation"},
-        {en: "heroic", uz: "qahramonlarcha", c: "Word Formation"}, {en: "heroine", uz: "qahramon ayol", c: "Word Formation"},
-        {en: "music", uz: "musiqa", c: "Word Formation"}, {en: "musical", uz: "musiqiy", c: "Word Formation"},
-        {en: "musician", uz: "musiqachi", c: "Word Formation"}, {en: "play", uz: "o'ynamoq", c: "Word Formation"},
-        {en: "player", uz: "o'yinchi", c: "Word Formation"}, {en: "playful", uz: "o'yinqaroq", c: "Word Formation"},
-        {en: "sail", uz: "suzmoq", c: "Word Formation"}, {en: "sailing", uz: "suzish, dengiz safari", c: "Word Formation"},
-        {en: "sailor", uz: "dengizchi", c: "Word Formation"}, {en: "sing", uz: "kuylamoq", c: "Word Formation"},
-        {en: "sang", uz: "sing (o'tgan zamon)", c: "Word Formation"}, {en: "sung", uz: "sing (P.P. shakli)", c: "Word Formation"},
-        {en: "song", uz: "kuy/qo'shiq", c: "Word Formation"}, {en: "singer", uz: "qo'shiqchi", c: "Word Formation"},
-        {en: "singing", uz: "kuylash", c: "Word Formation"}, {en: "bored with", uz: "...dan zerikkan", c: "Word Patterns"},
-        {en: "crazy about", uz: "...ning ashaddiy muhlisi", c: "Word Patterns"}, {en: "good at", uz: "...da yaxshi", c: "Word Patterns"},
-        {en: "interested in", uz: "...ga qiziqmoq", c: "Word Patterns"}, {en: "keen on", uz: "...ga qiziqmoq", c: "Word Patterns"},
-        {en: "popular with", uz: "...bilan mashhur", c: "Word Patterns"}, {en: "feel like", uz: "xohlamoq", c: "Word Patterns"},
-        {en: "listen to", uz: "tinglamoq", c: "Word Patterns"}, {en: "take part in", uz: "qatnashmoq", c: "Word Patterns"},
-        {en: "a book (by sb) about", uz: "...haqida kitob", c: "Word Patterns"}, {en: "a fan of", uz: "...ning muhlisi", c: "Word Patterns"},
-        {en: "a game against", uz: "...ga qarshi o'yin", c: "Word Patterns"}
+        {en: "send off", uz: "chetlatmoq (o'yindan)", c: "Phrasal Verbs"}, {en: "take up", uz: "boshlamoq", c: "Phrasal Verbs"},
+        {en: "for a long time", uz: "ko'p vaqtdan beri", c: "Phrases"}, {en: "on stage", uz: "sahnada", c: "Phrases"},
+        {en: "musician", uz: "musiqachi", c: "Word Formation"}, {en: "player", uz: "o'yinchi", c: "Word Formation"},
+        {en: "singer", uz: "qo'shiqchi", c: "Word Formation"}, {en: "sailing", uz: "suzish", c: "Word Formation"}
+        // ... Lug'atni xohlagancha davom ettirish mumkin
     ];
 
     let quiz = [], current = 0, score = 0, mode = '', answered = false;
+    let synth = window.speechSynthesis;
 
-    function wakeUpAudio() {
+    // Telefonlarda ovozni faollashtiruvchi "sehrli" funksiya
+    function unlockAudio() {
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+            synth.cancel(); // Navbatni tozalash
+            const silent = new SpeechSynthesisUtterance(" ");
+            silent.volume = 0;
+            synth.speak(silent);
         }
     }
 
     function startQuiz(m) {
-        wakeUpAudio();
+        unlockAudio(); // Tugma bosilganda ovozni uyg'otamiz
         mode = m; score = 0; current = 0;
         quiz = [...dictionary].sort(() => Math.random() - 0.5);
         document.getElementById('start-screen').style.display = 'none';
@@ -155,22 +150,28 @@
         document.getElementById('next-btn').style.display = 'none';
     }
 
-    function check(btn, selected, correct, speakWord) {
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            synth.cancel(); // Oldingi ovozni to'xtatish
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            u.rate = 0.8; // Biroz sekinroq va aniqroq talaffuz
+            u.pitch = 1;
+            synth.speak(u);
+        }
+    }
+
+    function check(btn, selected, correct, englishWord) {
         if(answered) return;
         answered = true;
 
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(speakWord);
-            u.lang = 'en-US';
-            u.rate = 0.9;
-            window.speechSynthesis.speak(u);
-        }
+        speak(englishWord); // Javob tanlanganda inglizcha so'zni o'qiydi
 
         if(selected === correct) {
             btn.classList.add('correct');
             score++;
         } else {
+            if(navigator.vibrate) navigator.vibrate(50); // Xatoda tebranish (Android)
             btn.classList.add('wrong');
             document.querySelectorAll('.opt').forEach(x => { if(x.innerText === correct) x.classList.add('correct'); });
         }
@@ -189,10 +190,10 @@
         const p = total === 0 ? 0 : Math.round((score/total)*100);
         document.getElementById('quiz-area').innerHTML = `
             <div class="result-box">
-                <h2>Natija</h2>
+                <div style="font-size: 50px;">${p >= 80 ? '🎉' : '📚'}</div>
                 <div class="result-pct">${p}%</div>
-                <p>To'g'ri: ${score} / ${total}</p>
-                <button class="mode-btn" onclick="location.reload()" style="background:var(--p);color:white">Qayta boshlash</button>
+                <p style="font-weight:700; color:var(--secondary);">Natija: ${score} / ${total}</p>
+                <button class="mode-btn" onclick="location.reload()" style="background:var(--p); color:white;">Qayta boshlash</button>
             </div>`;
     }
 </script>
