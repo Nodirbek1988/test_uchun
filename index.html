@@ -3,63 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VocabPhone Pro</title>
+    <title>Honor Optimized Vocab</title>
     <style>
         :root { --p: #00b894; --bg: #f2f2f7; --txt: #1c1c1e; --success: #34c759; --danger: #ff3b30; --secondary: #8e8e93; }
-        
-        /* Telefon uchun maxsus: teginishdagi effektlarni o'chirish */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; justify-content: center; }
-
-        .quiz-card { 
-            background: white; width: 100%; max-width: 450px; padding: 20px; 
-            border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-            min-height: 90vh; display: flex; flex-direction: column; 
-        }
-
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .quiz-card { background: white; width: 100%; max-width: 450px; padding: 20px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); min-height: 90vh; display: flex; flex-direction: column; }
         #start-screen, .result-box { text-align: center; margin: auto 0; }
-        
-        .mode-btn { 
-            width: 100%; padding: 20px; margin: 12px 0; border: none; 
-            border-radius: 20px; background: #f1f3f5; font-size: 18px; 
-            font-weight: 700; cursor: pointer; color: var(--txt);
-        }
-        .mode-btn:active { background: #e2e6ea; transform: scale(0.97); }
-
+        .mode-btn { width: 100%; padding: 20px; margin: 12px 0; border: none; border-radius: 20px; background: #f1f3f5; font-size: 18px; font-weight: 700; cursor: pointer; color: var(--txt); }
         .progress-bar { width: 100%; height: 8px; background: #e5e5ea; border-radius: 4px; margin: 15px 0; overflow: hidden; }
-        #progress { height: 100%; background: var(--p); width: 0%; transition: 0.4s cubic-bezier(0.1, 0.7, 0.1, 1); }
-
-        .question-text { font-size: 28px; font-weight: 800; text-align: center; margin: 30px 0; color: var(--txt); min-height: 70px; display: flex; align-items: center; justify-content: center;}
-
+        #progress { height: 100%; background: var(--p); width: 0%; transition: 0.4s ease; }
+        .question-text { font-size: 28px; font-weight: 800; text-align: center; margin: 30px 0; color: var(--txt); min-height: 80px; display: flex; align-items: center; justify-content: center; }
         .options { display: grid; gap: 12px; }
-        .opt { 
-            padding: 18px; border: 2px solid #f2f2f7; border-radius: 18px; 
-            background: white; font-size: 17px; font-weight: 600; cursor: pointer;
-            transition: 0.2s;
-        }
-        
-        .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; transform: scale(1.02); }
+        .opt { padding: 18px; border: 2px solid #f2f2f7; border-radius: 18px; background: white; font-size: 17px; font-weight: 600; cursor: pointer; }
+        .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
         .wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
-
         .footer { margin-top: auto; padding-top: 20px; }
         .score-info { text-align: center; font-weight: 700; color: var(--secondary); margin-bottom: 15px; font-size: 18px; }
-        
         .btn-group { display: flex; gap: 10px; }
-        #next-btn { flex: 2; padding: 18px; border-radius: 16px; background: var(--txt); color: white; font-weight: 700; border: none; display: none; font-size: 16px; }
-        #finish-btn { flex: 1; padding: 18px; border-radius: 16px; background: #fff; color: var(--danger); border: 2px solid var(--danger); font-weight: 700; font-size: 14px; }
-        
-        .result-pct { font-size: 65px; font-weight: 900; color: var(--p); margin: 10px 0; }
+        #next-btn { flex: 2; padding: 18px; border-radius: 16px; background: var(--txt); color: white; font-weight: 700; border: none; display: none; }
+        #finish-btn { flex: 1; padding: 18px; border-radius: 16px; background: #fff; color: var(--danger); border: 2px solid var(--danger); font-weight: 700; }
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
     <div id="start-screen">
-        <h1 style="font-size: 32px; margin-bottom: 5px;">English Unit 1</h1>
-        <p style="color: var(--secondary); margin-bottom: 30px;">Ovozni eshitish uchun rejimni tanlang</p>
-        <button class="mode-btn" onclick="startQuiz('uz-en')">O'zbekcha ➔ Inglizcha 🔊</button>
-        <button class="mode-btn" onclick="startQuiz('en-uz')">Inglizcha ➔ O'zbekcha 🔊</button>
+        <h1 style="font-size: 32px;">Unit 1 Test</h1>
+        <p id="audio-status" style="color: var(--secondary); font-size: 14px;">Ovoz tizimi tayyorlanmoqda...</p>
+        <button class="mode-btn" onclick="startQuiz('uz-en')">O'zbekcha ➔ Inglizcha</button>
+        <button class="mode-btn" onclick="startQuiz('en-uz')">Inglizcha ➔ O'zbekcha</button>
     </div>
 
     <div id="quiz-area" style="display: none; flex-direction: column; flex-grow: 1;">
@@ -68,15 +41,13 @@
             <span id="counter" style="font-size: 14px; font-weight: 700; color: var(--secondary);">0/0</span>
         </div>
         <div class="progress-bar"><div id="progress"></div></div>
-        
         <div id="q-text" class="question-text">...</div>
         <div id="options" class="options"></div>
-
         <div class="footer">
             <div id="score-display" class="score-info">Ball: 0</div>
             <div class="btn-group">
                 <button id="finish-btn" onclick="endQuiz()">Tugatish</button>
-                <button id="next-btn" onclick="nextQuestion()">Keyingisi &rarr;</button>
+                <button id="next-btn" onclick="nextQuestion()">Keyingisi</button>
             </div>
         </div>
     </div>
@@ -84,35 +55,41 @@
 
 <script>
     const dictionary = [
-        {en: "beat", uz: "yutmoq, mag'lub qilmoq", c: "Vocabulary"}, {en: "board game", uz: "taxtali o'yin", c: "Vocabulary"},
-        {en: "captain", uz: "kapitan", c: "Vocabulary"}, {en: "challenge", uz: "da'vat etmoq", c: "Vocabulary"},
-        {en: "champion", uz: "chempion", c: "Vocabulary"}, {en: "cheat", uz: "aldamoq", c: "Vocabulary"},
-        {en: "coach", uz: "murabbiy", c: "Vocabulary"}, {en: "competition", uz: "musobaqa", c: "Vocabulary"},
-        {en: "concert", uz: "konsert", c: "Vocabulary"}, {en: "defeat", uz: "mag'lub qilmoq", c: "Vocabulary"},
+        {en: "beat", uz: "yutmoq, mag'lub qilmoq", c: "Topic Vocabulary"}, {en: "board game", uz: "taxtali o'yin", c: "Topic Vocabulary"},
+        {en: "captain", uz: "kapitan", c: "Topic Vocabulary"}, {en: "challenge", uz: "da'vat etmoq", c: "Topic Vocabulary"},
+        {en: "champion", uz: "chempion", c: "Topic Vocabulary"}, {en: "cheat", uz: "aldamoq", c: "Topic Vocabulary"},
+        {en: "coach", uz: "murabbiy", c: "Topic Vocabulary"}, {en: "competition", uz: "musobaqa", c: "Topic Vocabulary"},
+        {en: "concert", uz: "konsert", c: "Topic Vocabulary"}, {en: "defeat", uz: "mag'lub qilmoq", c: "Topic Vocabulary"},
         {en: "carry on", uz: "davom etmoq", c: "Phrasal Verbs"}, {en: "eat out", uz: "restoranda ovqatlanmoq", c: "Phrasal Verbs"},
-        {en: "give up", uz: "to'xtatmoq", c: "Phrasal Verbs"}, {en: "join in", uz: "qo'shilmoq", c: "Phrasal Verbs"},
-        {en: "send off", uz: "chetlatmoq (o'yindan)", c: "Phrasal Verbs"}, {en: "take up", uz: "boshlamoq", c: "Phrasal Verbs"},
-        {en: "for a long time", uz: "ko'p vaqtdan beri", c: "Phrases"}, {en: "on stage", uz: "sahnada", c: "Phrases"},
-        {en: "musician", uz: "musiqachi", c: "Word Formation"}, {en: "player", uz: "o'yinchi", c: "Word Formation"},
-        {en: "singer", uz: "qo'shiqchi", c: "Word Formation"}, {en: "sailing", uz: "suzish", c: "Word Formation"}
-        // ... Lug'atni xohlagancha davom ettirish mumkin
+        {en: "give up", uz: "to'xtatmoq", c: "Phrasal Verbs"}, {en: "join in", uz: "qo'shilmoq", c: "Phrasal Verbs"}
     ];
 
     let quiz = [], current = 0, score = 0, mode = '', answered = false;
-    let synth = window.speechSynthesis;
+    let selectedVoice = null;
 
-    // Telefonlarda ovozni faollashtiruvchi "sehrli" funksiya
-    function unlockAudio() {
-        if ('speechSynthesis' in window) {
-            synth.cancel(); // Navbatni tozalash
-            const silent = new SpeechSynthesisUtterance(" ");
-            silent.volume = 0;
-            synth.speak(silent);
+    // Honor uchun ovozlarni oldindan yuklash
+    function loadVoices() {
+        let voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            // Inglizcha ovozni topish (Honor/Android uchun)
+            selectedVoice = voices.find(v => v.lang.includes('en-US')) || voices.find(v => v.lang.includes('en'));
+            document.getElementById('audio-status').innerText = "Ovoz tayyor ✅";
         }
     }
 
+    // Brauzer ovozlarni yuklaganda ishga tushadi
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+
     function startQuiz(m) {
-        unlockAudio(); // Tugma bosilganda ovozni uyg'otamiz
+        // Honor tizimini "uyg'otish"
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+            let wakeUp = new SpeechSynthesisUtterance("Start");
+            wakeUp.volume = 0; // Shovqinsiz uyg'otish
+            window.speechSynthesis.speak(wakeUp);
+        }
+
         mode = m; score = 0; current = 0;
         quiz = [...dictionary].sort(() => Math.random() - 0.5);
         document.getElementById('start-screen').style.display = 'none';
@@ -127,7 +104,6 @@
         document.getElementById('counter').innerText = `${current + 1}/${quiz.length}`;
         document.getElementById('progress').style.width = `${(current / quiz.length) * 100}%`;
         document.getElementById('q-text').innerText = mode === 'uz-en' ? item.uz : item.en;
-        document.getElementById('score-display').innerText = `Ball: ${score}`;
 
         const correctVal = mode === 'uz-en' ? item.en : item.uz;
         let opts = [correctVal];
@@ -151,27 +127,26 @@
     }
 
     function speak(text) {
-        if ('speechSynthesis' in window) {
-            synth.cancel(); // Oldingi ovozni to'xtatish
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = 'en-US';
-            u.rate = 0.8; // Biroz sekinroq va aniqroq talaffuz
-            u.pitch = 1;
-            synth.speak(u);
-        }
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel(); // Navbatni tozalash
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        if (selectedVoice) utterance.voice = selectedVoice;
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8;
+        window.speechSynthesis.speak(utterance);
     }
 
     function check(btn, selected, correct, englishWord) {
         if(answered) return;
         answered = true;
 
-        speak(englishWord); // Javob tanlanganda inglizcha so'zni o'qiydi
+        speak(englishWord); // HONOR uchun eng muhim joy
 
         if(selected === correct) {
             btn.classList.add('correct');
             score++;
         } else {
-            if(navigator.vibrate) navigator.vibrate(50); // Xatoda tebranish (Android)
             btn.classList.add('wrong');
             document.querySelectorAll('.opt').forEach(x => { if(x.innerText === correct) x.classList.add('correct'); });
         }
@@ -190,9 +165,8 @@
         const p = total === 0 ? 0 : Math.round((score/total)*100);
         document.getElementById('quiz-area').innerHTML = `
             <div class="result-box">
-                <div style="font-size: 50px;">${p >= 80 ? '🎉' : '📚'}</div>
                 <div class="result-pct">${p}%</div>
-                <p style="font-weight:700; color:var(--secondary);">Natija: ${score} / ${total}</p>
+                <p>Ball: ${score} / ${total}</p>
                 <button class="mode-btn" onclick="location.reload()" style="background:var(--p); color:white;">Qayta boshlash</button>
             </div>`;
     }
