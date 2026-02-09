@@ -3,136 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vocabulary Pro v2.3 - Mobile Ready</title>
+    <title>Vocabulary Pro v2.4 - Sound Fixed</title>
     <style>
         :root { --p: #00b894; --bg: #f2f2f7; --txt: #1c1c1e; --success: #34c759; --danger: #ff3b30; --secondary: #8e8e93; }
-        
-        /* Mobil uchun barcha teginishlarni tozalash */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            background: var(--bg); 
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start; /* Mobil ekranlarda tepadan boshlash yaxshi */
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 15px; 
-        }
-        
-        .quiz-card { 
-            background: white; 
-            width: 100%; 
-            max-width: 450px; 
-            padding: 20px; 
-            border-radius: 24px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 520px; 
-            margin-top: 20px;
-        }
-        
-        /* Start Screen */
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 15px; }
+        .quiz-card { background: white; width: 100%; max-width: 450px; padding: 20px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; min-height: 520px; margin-top: 20px; }
         #start-screen { text-align: center; margin: auto 0; }
-        .mode-btn { 
-            width: 100%; 
-            padding: 20px; 
-            margin: 12px 0; 
-            border: none; 
-            border-radius: 18px; 
-            background: #f1f3f5; 
-            font-size: 18px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            color: var(--txt);
-            display: block;
-        }
-        .mode-btn:active { background: #e9ecef; transform: scale(0.98); }
-
+        .mode-btn { width: 100%; padding: 20px; margin: 12px 0; border: none; border-radius: 18px; background: #f1f3f5; font-size: 18px; font-weight: 700; cursor: pointer; color: var(--txt); }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .category-tag { background: #00b89415; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; color: var(--p); text-transform: uppercase; }
-        .counter { font-size: 13px; font-weight: 600; color: var(--secondary); }
-        
         .progress-bar { width: 100%; height: 6px; background: #e5e5ea; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
-        #progress { height: 100%; background: var(--p); width: 0%; transition: 0.3s ease; }
-
+        #progress { height: 100%; background: var(--p); width: 0%; transition: 0.3s; }
         .question-box { text-align: center; margin-bottom: 25px; }
-        .mode-label { font-size: 10px; font-weight: 800; color: var(--secondary); letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
         .question-text { font-size: 26px; font-weight: 800; color: var(--txt); }
-
-        /* Variantlar - Mobil uchun katta va bosishga qulay */
         .options { display: grid; gap: 12px; width: 100%; }
-        .opt { 
-            padding: 18px; 
-            border: 2px solid #f2f2f7; 
-            border-radius: 16px; 
-            background: white; 
-            font-size: 16px; 
-            font-weight: 600; 
-            color: var(--txt); 
-            text-align: center;
-            width: 100%;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-        
+        .opt { padding: 18px; border: 2px solid #f2f2f7; border-radius: 16px; background: white; font-size: 16px; font-weight: 600; color: var(--txt); text-align: center; width: 100%; cursor: pointer; }
         .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
         .wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
-
         .footer { margin-top: auto; padding-top: 25px; }
-        .score-row { margin-bottom: 15px; font-weight: 700; font-size: 16px; text-align: center; }
-        
         .btn-container { display: flex; gap: 10px; height: 55px; }
         .action-btn { flex: 1; border-radius: 14px; font-weight: 700; font-size: 15px; cursor: pointer; border: none; }
-        
-        #finish-btn { background: #fff; color: var(--danger); border: 2px solid var(--danger); }
         #next-btn { background: var(--txt); color: white; display: none; }
-        .hidden-btn { flex: 1; visibility: hidden; pointer-events: none; }
-
-        /* Result */
-        .result-box { text-align: center; margin: auto 0; }
-        .result-pct { font-size: 60px; font-weight: 900; color: var(--p); margin: 10px 0; }
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
     <div id="start-screen">
-        <h1 style="margin:0 0 10px 0; font-size: 28px;">Unit 1 Test</h1>
-        <p style="color: var(--secondary); margin-bottom: 30px;">Davom etish uchun rejimni tanlang</p>
+        <h1 style="margin:0;">Unit 1 Test</h1>
+        <p style="color: var(--secondary); margin-bottom: 30px;">Ovoz ishlashi uchun bosing</p>
         <button class="mode-btn" onclick="startQuiz('uz-en')">O'zbekcha ➔ Inglizcha</button>
         <button class="mode-btn" onclick="startQuiz('en-uz')">Inglizcha ➔ O'zbekcha</button>
     </div>
 
     <div id="quiz-area" style="display: none; height: 100%; flex-direction: column;">
         <div class="header">
-            <span id="category" class="category-tag">Loading...</span>
-            <span id="counter" class="counter">0 / 0</span>
+            <span id="category" class="category-tag">...</span>
+            <span id="counter" style="font-size:13px; color:var(--secondary);">0 / 0</span>
         </div>
         <div class="progress-bar"><div id="progress"></div></div>
-        
         <div class="question-box">
-            <div id="mode-label" class="mode-label">TOPING:</div>
+            <div style="font-size:10px; font-weight:800; color:var(--secondary);">TOPING:</div>
             <div id="q-text" class="question-text">...</div>
         </div>
-        
         <div id="options" class="options"></div>
-        
         <div class="footer">
-            <div class="score-row" id="score-info">Ball: 0</div>
+            <div id="score-info" style="text-align:center; font-weight:700; margin-bottom:10px;">Ball: 0</div>
             <div class="btn-container">
-                <button id="finish-btn" class="action-btn" onclick="showResults()">Tugatish</button>
+                <button class="action-btn" style="background:#fff; color:var(--danger); border:2px solid var(--danger);" onclick="location.reload()">Chiqish</button>
                 <button id="next-btn" class="action-btn" onclick="nextQuestion()">Keyingisi &rarr;</button>
-                <div id="btn-placeholder" class="hidden-btn"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Lug'at bazasi (To'liq)
     const dictionary = [
         {en: "beat", uz: "yutmoq, mag'lub qilmoq", c: "Topic Vocabulary"}, {en: "board game", uz: "taxtali o'yin", c: "Topic Vocabulary"},
         {en: "captain", uz: "kapitan", c: "Topic Vocabulary"}, {en: "challenge", uz: "da'vat etmoq", c: "Topic Vocabulary"},
@@ -182,31 +108,21 @@
     ];
 
     let quiz = [], current = 0, score = 0, mode = '', answered = false;
+    let synth = window.speechSynthesis;
 
-    // Mobil ovoz aktivatori - Bu juda muhim!
-    function wakeUpAudio() {
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance("");
-            window.speechSynthesis.speak(utterance);
-        }
-    }
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+    // MUHIM: Mobil ovoz uchun "soxta" start
+    function forceVoice() {
+        const u = new SpeechSynthesisUtterance(" ");
+        synth.speak(u);
     }
 
     function startQuiz(m) {
-        wakeUpAudio(); // Foydalanuvchi tanlagan zahoti ovozni faollashtirish
+        forceVoice(); // Ovoz tizimini uyg'otish
         mode = m;
         score = 0; current = 0;
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('quiz-area').style.display = 'flex';
-        document.getElementById('mode-label').innerText = mode === 'uz-en' ? 'Inglizchasini toping:' : 'O\'zbekchasini toping:';
-        quiz = shuffle([...dictionary]);
+        quiz = [...dictionary].sort(() => Math.random() - 0.5);
         render();
     }
 
@@ -229,70 +145,54 @@
             if(!opts.includes(v)) opts.push(v);
         }
         
-        shuffle(opts).forEach(o => {
+        opts.sort(() => Math.random() - 0.5).forEach(o => {
             const b = document.createElement('button');
             b.className = 'opt';
             b.innerText = o;
-            // Mobil uchun click hodisasi
-            b.addEventListener('click', function(e) {
-                e.preventDefault();
-                if(!answered) checkAnswer(this, o, correctVal, item.en);
+            b.addEventListener('click', () => {
+                if(!answered) check(b, o, correctVal, item.en);
             });
             optBox.appendChild(b);
         });
-        
         document.getElementById('next-btn').style.display = 'none';
-        document.getElementById('btn-placeholder').style.display = 'block';
     }
 
-    function checkAnswer(btn, selected, correct, speakWord) {
+    function check(btn, selected, correct, english) {
         answered = true;
-        
-        // Barcha variantlarni o'chirish
-        const allOpts = document.querySelectorAll('.opt');
-        allOpts.forEach(x => x.style.pointerEvents = 'none');
-        
-        // Ovoz berish (Faqat inglizcha so'z uchun)
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(speakWord);
-            u.lang = 'en-US';
-            u.rate = 0.85;
-            window.speechSynthesis.speak(u);
-        }
+        const all = document.querySelectorAll('.opt');
+        all.forEach(x => x.style.pointerEvents = 'none');
+
+        // Ovoz berish qismi (Mobil uchun optimallashtirilgan)
+        synth.cancel();
+        const utterance = new SpeechSynthesisUtterance(english);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8; // Sal sekinroq va aniqroq
+        synth.speak(utterance);
 
         if(selected === correct) {
             btn.classList.add('correct');
             score++;
         } else {
             btn.classList.add('wrong');
-            allOpts.forEach(x => {
-                if(x.innerText === correct) x.classList.add('correct');
-            });
+            all.forEach(x => { if(x.innerText === correct) x.classList.add('correct'); });
         }
         
         document.getElementById('score-info').innerText = `Ball: ${score}`;
-        document.getElementById('btn-placeholder').style.display = 'none';
         document.getElementById('next-btn').style.display = 'block';
     }
 
     function nextQuestion() {
         current++;
         if(current < quiz.length) render();
-        else showResults();
-    }
-
-    function showResults() {
-        const finalTotal = answered ? current + 1 : current;
-        const p = finalTotal === 0 ? 0 : Math.round((score/finalTotal)*100);
-        
-        document.getElementById('quiz-area').innerHTML = `
-            <div class="result-box">
-                <h2 style="margin:0;">Test Yakunlandi</h2>
-                <div class="result-pct">${p}%</div>
-                <p style="font-weight:700; color:var(--secondary); margin-bottom:30px;">To'g'ri javoblar: ${score} / ${finalTotal}</p>
-                <button class="mode-btn" onclick="location.reload()" style="background:var(--p); color:white;">Qayta boshlash</button>
-            </div>`;
+        else {
+            const p = Math.round((score/quiz.length)*100);
+            document.getElementById('quiz-area').innerHTML = `
+                <div style="text-align:center; margin: auto 0;">
+                    <h2 style="color:var(--p); font-size:60px; margin:0;">${p}%</h2>
+                    <p style="font-weight:700;">To'g'ri: ${score} / ${quiz.length}</p>
+                    <button class="mode-btn" onclick="location.reload()" style="background:var(--p); color:white;">Bosh menyu</button>
+                </div>`;
+        }
     }
 </script>
 </body>
