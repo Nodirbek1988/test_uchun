@@ -2,160 +2,144 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vocab v2.6 - Ultra Fast</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Quiz</title>
     <style>
-        :root { --p: #00b894; --bg: #f2f2f7; --txt: #1c1c1e; --success: #34c759; --danger: #ff3b30; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 15px; display: flex; justify-content: center; }
-        .quiz-card { background: white; width: 100%; max-width: 480px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); min-height: 450px; margin-top: 20px; }
-        .mode-btn { width: 100%; padding: 20px; margin: 10px 0; border: none; border-radius: 15px; background: #eef2f3; font-size: 18px; font-weight: 700; cursor: pointer; }
-        .header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; color: #8e8e93; }
-        .question-text { font-size: 24px; font-weight: 800; text-align: center; margin: 20px 0; min-height: 60px; }
-        .options { display: grid; gap: 10px; }
-        .opt { padding: 15px; border: 2px solid #f2f2f7; border-radius: 12px; background: white; font-size: 16px; font-weight: 600; text-align: center; }
-        .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
-        .wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
-        #next-btn { width: 100%; padding: 15px; margin-top: 20px; border-radius: 12px; border: none; background: var(--txt); color: white; font-weight: 700; display: none; }
+        body { font-family: sans-serif; background: #f0f0f0; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .card { background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; background: #eee; }
+        .opt-btn { background: #fff; border: 2px solid #eee; margin: 5px 0; }
+        .correct { background: #2ecc71 !important; color: white; }
+        .wrong { background: #e74c3c !important; color: white; }
+        #next-btn { background: #34495e; color: white; display: none; margin-top: 20px; }
+        .q-text { font-size: 22px; text-align: center; margin: 20px 0; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="quiz-card">
+<div class="card">
     <div id="start-screen">
-        <h2 style="text-align:center">Unit 1 Test</h2>
-        <button class="mode-btn" onclick="init('uz-en')">O'zbekcha ➔ Inglizcha</button>
-        <button class="mode-btn" onclick="init('en-uz')">Inglizcha ➔ O'zbekcha</button>
+        <h2 style="text-align: center;">Unit 1 Test</h2>
+        <button class="btn" onclick="start('uz-en')">O'zbekcha -> Inglizcha</button>
+        <button class="btn" onclick="start('en-uz')">Inglizcha -> O'zbekcha</button>
     </div>
 
-    <div id="quiz-area" style="display: none;">
-        <div class="header">
-            <span id="category">...</span>
-            <span id="counter">0/0</span>
-        </div>
-        <div id="q-text" class="question-text">...</div>
-        <div id="options" class="options"></div>
-        <button id="next-btn" onclick="render()">Keyingisi</button>
-        <button onclick="location.reload()" style="width:100%; background:none; border:none; color:red; margin-top:15px; font-size:12px;">Chiqish</button>
+    <div id="quiz-screen" style="display: none;">
+        <div id="q-text" class="q-text"></div>
+        <div id="options"></div>
+        <button id="next-btn" class="btn" onclick="render()">Keyingisi</button>
     </div>
 </div>
 
 <script>
     const data = [
-        {en: "beat", uz: "yutmoq, mag'lub qilmoq", c: "Topic Vocabulary"}, {en: "board game", uz: "taxtali o'yin", c: "Topic Vocabulary"},
-        {en: "captain", uz: "kapitan", c: "Topic Vocabulary"}, {en: "challenge", uz: "da'vat etmoq", c: "Topic Vocabulary"},
-        {en: "champion", uz: "chempion", c: "Topic Vocabulary"}, {en: "cheat", uz: "aldamoq", c: "Topic Vocabulary"},
-        {en: "classical music", uz: "klassik musiqa", c: "Topic Vocabulary"}, {en: "club", uz: "klub", c: "Topic Vocabulary"},
-        {en: "coach", uz: "murabbiy", c: "Topic Vocabulary"}, {en: "competition", uz: "musobaqa", c: "Topic Vocabulary"},
-        {en: "concert", uz: "konsert", c: "Topic Vocabulary"}, {en: "defeat", uz: "mag'lub qilmoq", c: "Topic Vocabulary"},
-        {en: "entertaining", uz: "ko'ngilochar", c: "Topic Vocabulary"}, {en: "folk music", uz: "xalq qo'shig'i", c: "Topic Vocabulary"},
-        {en: "group", uz: "guruh", c: "Topic Vocabulary"}, {en: "gym", uz: "zal", c: "Topic Vocabulary"},
-        {en: "have fun", uz: "yayramoq", c: "Topic Vocabulary"}, {en: "interest", uz: "qiziqmoq, qiziqish", c: "Topic Vocabulary"},
-        {en: "member", uz: "a'zo", c: "Topic Vocabulary"}, {en: "opponent", uz: "raqib", c: "Topic Vocabulary"},
-        {en: "organise", uz: "tashkillashtirmoq", c: "Topic Vocabulary"}, {en: "pleasure", uz: "rohat", c: "Topic Vocabulary"},
-        {en: "referee", uz: "sudya, hakam", c: "Topic Vocabulary"}, {en: "rhythm", uz: "ritm", c: "Topic Vocabulary"},
-        {en: "risk", uz: "tavakkal qilmoq", c: "Topic Vocabulary"}, {en: "score", uz: "natija ko’rsatmoq", c: "Topic Vocabulary"},
-        {en: "support", uz: "qo'llab-quvatlamoq", c: "Topic Vocabulary"}, {en: "team", uz: "jamoa", c: "Topic Vocabulary"},
-        {en: "train", uz: "shug'ullanmoq", c: "Topic Vocabulary"}, {en: "video game", uz: "video o'yin", c: "Topic Vocabulary"},
-        {en: "carry on", uz: "davom etmoq", c: "Phrasal Verbs"}, {en: "eat out", uz: "restoranda ovqatlanmoq", c: "Phrasal Verbs"},
-        {en: "give up", uz: "to'xtatmoq", c: "Phrasal Verbs"}, {en: "join in", uz: "qo'shilmoq", c: "Phrasal Verbs"},
-        {en: "send off", uz: "chetlatmoq (o'yindan)", c: "Phrasal Verbs"}, {en: "take up", uz: "boshlamoq (sport/hobby)", c: "Phrasal Verbs"},
-        {en: "turn down", uz: "pasaytirmoq (ovozni)", c: "Phrasal Verbs"}, {en: "turn up", uz: "ko'tarmoq (ovozni)", c: "Phrasal Verbs"},
-        {en: "for a long time", uz: "ko'p vaqtdan beri", c: "Phrases"}, {en: "for fun", uz: "ko'ngilxushlik uchun", c: "Phrases"},
-        {en: "in the middle (of)", uz: "...ning o'rtasida", c: "Phrases"}, {en: "in time (for)", uz: "...uchun vaqtida", c: "Phrases"},
-        {en: "on CD/DVD/video", uz: "CD/DVD/videoda", c: "Phrases"}, {en: "on stage", uz: "sahnada", c: "Phrases"},
-        {en: "act", uz: "harakat qilmoq", c: "Word Formation"}, {en: "action", uz: "harakat", c: "Word Formation"},
-        {en: "(in)active", uz: "(no)faol", c: "Word Formation"}, {en: "actor", uz: "aktyor", c: "Word Formation"},
-        {en: "athlete", uz: "atlet", c: "Word Formation"}, {en: "athletic", uz: "atletik", c: "Word Formation"},
-        {en: "athletics", uz: "atletika", c: "Word Formation"}, {en: "child", uz: "bola", c: "Word Formation"},
-        {en: "children", uz: "bolalar", c: "Word Formation"}, {en: "childhood", uz: "bolalik", c: "Word Formation"},
-        {en: "collect", uz: "yig'moq", c: "Word Formation"}, {en: "collection", uz: "kolleksiya", c: "Word Formation"},
-        {en: "collector", uz: "yig'uvchi", c: "Word Formation"}, {en: "entertain", uz: "ko'ngilxushlik qilmoq", c: "Word Formation"},
-        {en: "entertainment", uz: "ko'ngilxushlik", c: "Word Formation"}, {en: "hero", uz: "qahramon", c: "Word Formation"},
-        {en: "heroic", uz: "qahramonlarcha", c: "Word Formation"}, {en: "heroine", uz: "qahramon ayol", c: "Word Formation"},
-        {en: "music", uz: "musiqa", c: "Word Formation"}, {en: "musical", uz: "musiqiy", c: "Word Formation"},
-        {en: "musician", uz: "musiqachi", c: "Word Formation"}, {en: "play", uz: "o'ynamoq", c: "Word Formation"},
-        {en: "player", uz: "o'yinchi", c: "Word Formation"}, {en: "playful", uz: "o'yinqaroq", c: "Word Formation"},
-        {en: "sail", uz: "suzmoq", c: "Word Formation"}, {en: "sailing", uz: "suzish, dengiz safari", c: "Word Formation"},
-        {en: "sailor", uz: "dengizchi", c: "Word Formation"}, {en: "sing", uz: "kuylamoq", c: "Word Formation"},
-        {en: "sang", uz: "sing (o'tgan zamon)", c: "Word Formation"}, {en: "sung", uz: "sing (P.P. shakli)", c: "Word Formation"},
-        {en: "song", uz: "kuy/qo'shiq", c: "Word Formation"}, {en: "singer", uz: "qo'shiqchi", c: "Word Formation"},
-        {en: "singing", uz: "kuylash", c: "Word Formation"}, {en: "bored with", uz: "...dan zerikkan", c: "Word Patterns"},
-        {en: "crazy about", uz: "...ning ashaddiy muhlisi", c: "Word Patterns"}, {en: "good at", uz: "...da yaxshi", c: "Word Patterns"},
-        {en: "interested in", uz: "...ga qiziqmoq", c: "Word Patterns"}, {en: "keen on", uz: "...ga qiziqmoq", c: "Word Patterns"},
-        {en: "popular with", uz: "...bilan mashhur", c: "Word Patterns"}, {en: "feel like", uz: "xohlamoq", c: "Word Patterns"},
-        {en: "listen to", uz: "tinglamoq", c: "Word Patterns"}, {en: "take part in", uz: "qatnashmoq", c: "Word Patterns"},
-        {en: "a book (by sb) about", uz: "...haqida kitob", c: "Word Patterns"}, {en: "a fan of", uz: "...ning muhlisi", c: "Word Patterns"},
-        {en: "a game against", uz: "...ga qarshi o'yin", c: "Word Patterns"}
+        {en: "beat", uz: "yutmoq, mag'lub qilmoq"}, {en: "board game", uz: "taxtali o'yin"},
+        {en: "captain", uz: "kapitan"}, {en: "challenge", uz: "da'vat etmoq"},
+        {en: "champion", uz: "chempion"}, {en: "cheat", uz: "aldamoq"},
+        {en: "classical music", uz: "klassik musiqa"}, {en: "club", uz: "klub"},
+        {en: "coach", uz: "murabbiy"}, {en: "competition", uz: "musobaqa"},
+        {en: "concert", uz: "konsert"}, {en: "defeat", uz: "mag'lub qilmoq"},
+        {en: "entertaining", uz: "ko'ngilochar"}, {en: "folk music", uz: "xalq qo'shig'i"},
+        {en: "group", uz: "guruh"}, {en: "gym", uz: "zal"},
+        {en: "have fun", uz: "yayramoq"}, {en: "interest", uz: "qiziqmoq, qiziqish"},
+        {en: "member", uz: "a'zo"}, {en: "opponent", uz: "raqib"},
+        {en: "organise", uz: "tashkillashtirmoq"}, {en: "pleasure", uz: "rohat"},
+        {en: "referee", uz: "sudya, hakam"}, {en: "rhythm", uz: "ritm"},
+        {en: "risk", uz: "tavakkal qilmoq"}, {en: "score", uz: "natija ko’rsatmoq"},
+        {en: "support", uz: "qo'llab-quvatlamoq"}, {en: "team", uz: "jamoa"},
+        {en: "train", uz: "shug'ullanmoq"}, {en: "video game", uz: "video o'yin"},
+        {en: "carry on", uz: "davom etmoq"}, {en: "eat out", uz: "restoranda ovqatlanmoq"},
+        {en: "give up", uz: "to'xtatmoq"}, {en: "join in", uz: "qo'shilmoq"},
+        {en: "send off", uz: "chetlatmoq (o'yindan)"}, {en: "take up", uz: "boshlamoq (sport/hobby)"},
+        {en: "turn down", uz: "pasaytirmoq (ovozni)"}, {en: "turn up", uz: "ko'tarmoq (ovozni)"},
+        {en: "for a long time", uz: "ko'p vaqtdan beri"}, {en: "for fun", uz: "ko'ngilxushlik uchun"},
+        {en: "in the middle (of)", uz: "...ning o'rtasida"}, {en: "in time (for)", uz: "...uchun vaqtida"},
+        {en: "on CD/DVD/video", uz: "CD/DVD/videoda"}, {en: "on stage", uz: "sahnada"},
+        {en: "act", uz: "harakat qilmoq"}, {en: "action", uz: "harakat"},
+        {en: "(in)active", uz: "(no)faol"}, {en: "actor", uz: "aktyor"},
+        {en: "athlete", uz: "atlet"}, {en: "athletic", uz: "atletik"},
+        {en: "athletics", uz: "atletika"}, {en: "child", uz: "bola"},
+        {en: "children", uz: "bolalar"}, {en: "childhood", uz: "bolalik"},
+        {en: "collect", uz: "yig'moq"}, {en: "collection", uz: "kolleksiya"},
+        {en: "collector", uz: "yig'uvchi"}, {en: "entertain", uz: "ko'ngilxushlik qilmoq"},
+        {en: "entertainment", uz: "ko'ngilxushlik"}, {en: "hero", uz: "qahramon"},
+        {en: "heroic", uz: "qahramonlarcha"}, {en: "heroine", uz: "qahramon ayol"},
+        {en: "music", uz: "musiqa"}, {en: "musical", uz: "musiqiy"},
+        {en: "musician", uz: "musiqachi"}, {en: "play", uz: "o'ynamoq"},
+        {en: "player", uz: "o'yinchi"}, {en: "playful", uz: "o'yinqaroq"},
+        {en: "sail", uz: "suzmoq"}, {en: "sailing", uz: "suzish, dengiz safari"},
+        {en: "sailor", uz: "dengizchi"}, {en: "sing", uz: "kuylamoq"},
+        {en: "sang", uz: "sing (o'tgan zamon)"}, {en: "sung", uz: "sing (P.P. shakli)"},
+        {en: "song", uz: "kuy/qo'shiq"}, {en: "singer", uz: "qo'shiqchi"},
+        {en: "singing", uz: "kuylash"}, {en: "bored with", uz: "...dan zerikkan"},
+        {en: "crazy about", uz: "...ning ashaddiy muhlisi"}, {en: "good at", uz: "...da yaxshi"},
+        {en: "interested in", uz: "...ga qiziqmoq"}, {en: "keen on", uz: "...ga qiziqmoq"},
+        {en: "popular with", uz: "...bilan mashhur"}, {en: "feel like", uz: "xohlamoq"},
+        {en: "listen to", uz: "tinglamoq"}, {en: "take part in", uz: "qatnashmoq"},
+        {en: "a book (by sb) about", uz: "...haqida kitob"}, {en: "a fan of", uz: "...ning muhlisi"},
+        {en: "a game against", uz: "...ga qarshi o'yin"}
     ];
 
-    let quiz = [], current = 0, score = 0, mode = '';
+    let quizData = [], current = 0, mode = '';
 
-    function init(m) {
-        // Ovoz tizimini "turitib yuborish"
-        let speak = new SpeechSynthesisUtterance(" ");
-        window.speechSynthesis.speak(speak);
-
+    function start(m) {
         mode = m;
-        quiz = data.sort(() => Math.random() - 0.5);
+        quizData = data.sort(() => Math.random() - 0.5);
         document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('quiz-area').style.display = 'block';
+        document.getElementById('quiz-screen').style.display = 'block';
         render();
     }
 
     function render() {
-        if(current >= quiz.length) {
-            alert("Tamom! Natija: " + score + "/" + quiz.length);
+        if(current >= quizData.length) {
+            alert("Test tugadi!");
             location.reload();
             return;
         }
-
-        const item = quiz[current];
-        document.getElementById('category').innerText = item.c;
-        document.getElementById('counter').innerText = (current + 1) + "/" + quiz.length;
-        document.getElementById('q-text').innerText = (mode === 'uz-en') ? item.uz : item.en;
         document.getElementById('next-btn').style.display = 'none';
-
+        const item = quizData[current];
+        document.getElementById('q-text').innerText = (mode === 'uz-en') ? item.uz : item.en;
+        
         const correct = (mode === 'uz-en') ? item.en : item.uz;
-        let opts = [correct];
-        while(opts.length < 4) {
+        let options = [correct];
+        while(options.length < 4) {
             let r = data[Math.floor(Math.random() * data.length)];
             let v = (mode === 'uz-en') ? r.en : r.uz;
-            if(!opts.includes(v)) opts.push(v);
+            if(!options.includes(v)) options.push(v);
         }
-        opts.sort(() => Math.random() - 0.5);
+        options.sort(() => Math.random() - 0.5);
 
         const box = document.getElementById('options');
         box.innerHTML = '';
-        opts.forEach(o => {
-            const btn = document.createElement('button');
-            btn.className = 'opt';
-            btn.innerText = o;
-            btn.onclick = () => check(btn, o, correct, item.en);
-            box.appendChild(btn);
+        options.forEach(opt => {
+            const b = document.createElement('button');
+            b.className = 'btn opt-btn';
+            b.innerText = opt;
+            b.onclick = () => check(b, opt, correct, item.en);
+            box.appendChild(b);
         });
     }
 
-    function check(btn, selected, correct, sound) {
-        const all = document.querySelectorAll('.opt');
-        all.forEach(b => b.onclick = null);
+    function check(btn, selected, correct, engWord) {
+        // Ovoz berish
+        const synth = window.speechSynthesis;
+        const utter = new SpeechSynthesisUtterance(engWord);
+        utter.lang = 'en-US';
+        synth.speak(utter);
 
-        // Ovoz chiqarish
-        window.speechSynthesis.cancel();
-        let u = new SpeechSynthesisUtterance(sound);
-        u.lang = 'en-US';
-        window.speechSynthesis.speak(u);
+        const buttons = document.querySelectorAll('.opt-btn');
+        buttons.forEach(b => b.disabled = true);
 
         if(selected === correct) {
             btn.classList.add('correct');
-            score++;
         } else {
             btn.classList.add('wrong');
-            all.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
+            buttons.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
         }
         document.getElementById('next-btn').style.display = 'block';
         current++;
     }
 </script>
+
 </body>
 </html>
