@@ -3,121 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vocabulary Pro v2.3 - Mobile Ready</title>
+    <title>Unit 2 Vocabulary - 84 Words</title>
     <style>
         :root { --p: #00b894; --bg: #f2f2f7; --txt: #1c1c1e; --success: #34c759; --danger: #ff3b30; --secondary: #8e8e93; }
-        
-        /* Mobil uchun barcha teginishlarni tozalash */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            background: var(--bg); 
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start; /* Mobil ekranlarda tepadan boshlash yaxshi */
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 15px; 
-        }
-        
-        .quiz-card { 
-            background: white; 
-            width: 100%; 
-            max-width: 450px; 
-            padding: 20px; 
-            border-radius: 24px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 520px; 
-            margin-top: 20px;
-        }
-        
-        /* Start Screen */
-        #start-screen { text-align: center; margin: auto 0; }
-        .mode-btn { 
-            width: 100%; 
-            padding: 20px; 
-            margin: 12px 0; 
-            border: none; 
-            border-radius: 18px; 
-            background: #f1f3f5; 
-            font-size: 18px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            color: var(--txt);
-            display: block;
-        }
-        .mode-btn:active { background: #e9ecef; transform: scale(0.98); }
-
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .category-tag { background: #00b89415; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; color: var(--p); text-transform: uppercase; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 10px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .quiz-card { background: white; width: 100%; max-width: 450px; padding: 15px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; flex-direction: column; min-height: 520px; margin-top: 5px; }
+        #start-screen, .result-box { text-align: center; margin: auto 0; }
+        .mode-btn { width: 100%; padding: 18px; margin: 10px 0; border: none; border-radius: 15px; background: #f1f3f5; font-size: 17px; font-weight: 700; cursor: pointer; color: var(--txt); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .category-tag { background: #00b89415; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; color: var(--p); text-transform: uppercase; }
         .counter { font-size: 13px; font-weight: 600; color: var(--secondary); }
-        
-        .progress-bar { width: 100%; height: 6px; background: #e5e5ea; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+        .progress-bar { width: 100%; height: 5px; background: #e5e5ea; border-radius: 3px; margin-bottom: 15px; overflow: hidden; }
         #progress { height: 100%; background: var(--p); width: 0%; transition: 0.3s ease; }
-
-        .question-box { text-align: center; margin-bottom: 25px; }
-        .mode-label { font-size: 10px; font-weight: 800; color: var(--secondary); letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
-        .question-text { font-size: 26px; font-weight: 800; color: var(--txt); }
-
-        /* Variantlar - Mobil uchun katta va bosishga qulay */
-        .options { display: grid; gap: 12px; width: 100%; }
-        .opt { 
-            padding: 18px; 
-            border: 2px solid #f2f2f7; 
-            border-radius: 16px; 
-            background: white; 
-            font-size: 16px; 
-            font-weight: 600; 
-            color: var(--txt); 
-            text-align: center;
-            width: 100%;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-        
+        .question-text { font-size: 24px; font-weight: 800; color: var(--txt); min-height: 60px; text-align: center; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;}
+        .options { display: grid; gap: 10px; width: 100%; }
+        .opt { padding: 16px; border: 2px solid #f2f2f7; border-radius: 15px; background: white; font-size: 15px; font-weight: 600; color: var(--txt); cursor: pointer; }
         .correct { background: var(--success) !important; color: white !important; border-color: var(--success) !important; }
         .wrong { background: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
-
-        .footer { margin-top: auto; padding-top: 25px; }
-        .score-row { margin-bottom: 15px; font-weight: 700; font-size: 16px; text-align: center; }
-        
-        .btn-container { display: flex; gap: 10px; height: 55px; }
-        .action-btn { flex: 1; border-radius: 14px; font-weight: 700; font-size: 15px; cursor: pointer; border: none; }
-        
+        .footer { margin-top: auto; padding-top: 15px; }
+        .score-row { font-weight: 700; font-size: 16px; text-align: center; color: var(--secondary); margin-bottom: 10px; }
+        .btn-container { display: flex; gap: 10px; width: 100%; height: 50px; }
+        .action-btn { flex: 1; border-radius: 14px; font-weight: 700; cursor: pointer; border: none; font-size: 14px; }
         #finish-btn { background: #fff; color: var(--danger); border: 2px solid var(--danger); }
-        #next-btn { background: var(--txt); color: white; display: none; }
-        .hidden-btn { flex: 1; visibility: hidden; pointer-events: none; }
-
-        /* Result */
-        .result-box { text-align: center; margin: auto 0; }
-        .result-pct { font-size: 60px; font-weight: 900; color: var(--p); margin: 10px 0; }
+        #next-btn { background: var(--txt); color: white; visibility: hidden; } 
+        .result-pct { font-size: 55px; font-weight: 900; color: var(--p); margin: 5px 0; }
     </style>
 </head>
 <body>
 
 <div class="quiz-card">
     <div id="start-screen">
-        <h1 style="margin:0 0 10px 0; font-size: 28px;">Unit 1 Test</h1>
-        <p style="color: var(--secondary); margin-bottom: 30px;">Davom etish uchun rejimni tanlang</p>
+        <h1 style="font-size: 24px;">Unit 2 Test</h1>
+        <p style="color: var(--secondary); font-size: 14px;">Learning and doing (84 ta so'z)</p>
         <button class="mode-btn" onclick="startQuiz('uz-en')">O'zbekcha ➔ Inglizcha</button>
         <button class="mode-btn" onclick="startQuiz('en-uz')">Inglizcha ➔ O'zbekcha</button>
     </div>
 
-    <div id="quiz-area" style="display: none; height: 100%; flex-direction: column;">
+    <div id="quiz-area" style="display: none; flex-direction: column; flex-grow: 1;">
         <div class="header">
-            <span id="category" class="category-tag">Loading...</span>
+            <span id="category" class="category-tag">...</span>
             <span id="counter" class="counter">0 / 0</span>
         </div>
         <div class="progress-bar"><div id="progress"></div></div>
-        
-        <div class="question-box">
-            <div id="mode-label" class="mode-label">TOPING:</div>
-            <div id="q-text" class="question-text">...</div>
-        </div>
-        
+        <div id="q-text" class="question-text">...</div>
         <div id="options" class="options"></div>
         
         <div class="footer">
@@ -125,102 +54,39 @@
             <div class="btn-container">
                 <button id="finish-btn" class="action-btn" onclick="showResults()">Tugatish</button>
                 <button id="next-btn" class="action-btn" onclick="nextQuestion()">Keyingisi &rarr;</button>
-                <div id="btn-placeholder" class="hidden-btn"></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Lug'at bazasi (To'liq)
     const dictionary = [
-        {en: "beat", uz: "yutmoq, mag'lub qilmoq", c: "Topic Vocabulary"}, {en: "board game", uz: "taxtali o'yin", c: "Topic Vocabulary"},
-        {en: "captain", uz: "kapitan", c: "Topic Vocabulary"}, {en: "challenge", uz: "da'vat etmoq", c: "Topic Vocabulary"},
-        {en: "champion", uz: "chempion", c: "Topic Vocabulary"}, {en: "cheat", uz: "aldamoq", c: "Topic Vocabulary"},
-        {en: "classical music", uz: "klassik musiqa", c: "Topic Vocabulary"}, {en: "club", uz: "klub", c: "Topic Vocabulary"},
-        {en: "coach", uz: "murabbiy", c: "Topic Vocabulary"}, {en: "competition", uz: "musobaqa", c: "Topic Vocabulary"},
-        {en: "concert", uz: "konsert", c: "Topic Vocabulary"}, {en: "defeat", uz: "mag'lub qilmoq", c: "Topic Vocabulary"},
-        {en: "entertaining", uz: "ko'ngilochar", c: "Topic Vocabulary"}, {en: "folk music", uz: "xalq qo'shig'i", c: "Topic Vocabulary"},
-        {en: "group", uz: "guruh", c: "Topic Vocabulary"}, {en: "gym", uz: "zal", c: "Topic Vocabulary"},
-        {en: "have fun", uz: "yayramoq", c: "Topic Vocabulary"}, {en: "interest", uz: "qiziqmoq, qiziqish", c: "Topic Vocabulary"},
-        {en: "member", uz: "a'zo", c: "Topic Vocabulary"}, {en: "opponent", uz: "raqib", c: "Topic Vocabulary"},
-        {en: "organise", uz: "tashkillashtirmoq", c: "Topic Vocabulary"}, {en: "pleasure", uz: "rohat", c: "Topic Vocabulary"},
-        {en: "referee", uz: "sudya, hakam", c: "Topic Vocabulary"}, {en: "rhythm", uz: "ritm", c: "Topic Vocabulary"},
-        {en: "risk", uz: "tavakkal qilmoq", c: "Topic Vocabulary"}, {en: "score", uz: "natija ko’rsatmoq", c: "Topic Vocabulary"},
-        {en: "support", uz: "qo'llab-quvatlamoq", c: "Topic Vocabulary"}, {en: "team", uz: "jamoa", c: "Topic Vocabulary"},
-        {en: "train", uz: "shug'ullanmoq", c: "Topic Vocabulary"}, {en: "video game", uz: "video o'yin", c: "Topic Vocabulary"},
-        {en: "carry on", uz: "davom etmoq", c: "Phrasal Verbs"}, {en: "eat out", uz: "restoranda ovqatlanmoq", c: "Phrasal Verbs"},
-        {en: "give up", uz: "to'xtatmoq", c: "Phrasal Verbs"}, {en: "join in", uz: "qo'shilmoq", c: "Phrasal Verbs"},
-        {en: "send off", uz: "chetlatmoq (o'yindan)", c: "Phrasal Verbs"}, {en: "take up", uz: "boshlamoq (sport/hobby)", c: "Phrasal Verbs"},
-        {en: "turn down", uz: "pasaytirmoq (ovozni)", c: "Phrasal Verbs"}, {en: "turn up", uz: "ko'tarmoq (ovozni)", c: "Phrasal Verbs"},
-        {en: "for a long time", uz: "ko'p vaqtdan beri", c: "Phrases"}, {en: "for fun", uz: "ko'ngilxushlik uchun", c: "Phrases"},
-        {en: "in the middle (of)", uz: "...ning o'rtasida", c: "Phrases"}, {en: "in time (for)", uz: "...uchun vaqtida", c: "Phrases"},
-        {en: "on CD/DVD/video", uz: "CD/DVD/videoda", c: "Phrases"}, {en: "on stage", uz: "sahnada", c: "Phrases"},
-        {en: "act", uz: "harakat qilmoq", c: "Word Formation"}, {en: "action", uz: "harakat", c: "Word Formation"},
-        {en: "(in)active", uz: "(no)faol", c: "Word Formation"}, {en: "actor", uz: "aktyor", c: "Word Formation"},
-        {en: "athlete", uz: "atlet", c: "Word Formation"}, {en: "athletic", uz: "atletik", c: "Word Formation"},
-        {en: "athletics", uz: "atletika", c: "Word Formation"}, {en: "child", uz: "bola", c: "Word Formation"},
-        {en: "children", uz: "bolalar", c: "Word Formation"}, {en: "childhood", uz: "bolalik", c: "Word Formation"},
-        {en: "collect", uz: "yig'moq", c: "Word Formation"}, {en: "collection", uz: "kolleksiya", c: "Word Formation"},
-        {en: "collector", uz: "yig'uvchi", c: "Word Formation"}, {en: "entertain", uz: "ko'ngilxushlik qilmoq", c: "Word Formation"},
-        {en: "entertainment", uz: "ko'ngilxushlik", c: "Word Formation"}, {en: "hero", uz: "qahramon", c: "Word Formation"},
-        {en: "heroic", uz: "qahramonlarcha", c: "Word Formation"}, {en: "heroine", uz: "qahramon ayol", c: "Word Formation"},
-        {en: "music", uz: "musiqa", c: "Word Formation"}, {en: "musical", uz: "musiqiy", c: "Word Formation"},
-        {en: "musician", uz: "musiqachi", c: "Word Formation"}, {en: "play", uz: "o'ynamoq", c: "Word Formation"},
-        {en: "player", uz: "o'yinchi", c: "Word Formation"}, {en: "playful", uz: "o'yinqaroq", c: "Word Formation"},
-        {en: "sail", uz: "suzmoq", c: "Word Formation"}, {en: "sailing", uz: "suzish, dengiz safari", c: "Word Formation"},
-        {en: "sailor", uz: "dengizchi", c: "Word Formation"}, {en: "sing", uz: "kuylamoq", c: "Word Formation"},
-        {en: "sang", uz: "sing (o'tgan zamon)", c: "Word Formation"}, {en: "sung", uz: "sing (P.P. shakli)", c: "Word Formation"},
-        {en: "song", uz: "kuy/qo'shiq", c: "Word Formation"}, {en: "singer", uz: "qo'shiqchi", c: "Word Formation"},
-        {en: "singing", uz: "kuylash", c: "Word Formation"}, {en: "bored with", uz: "...dan zerikkan", c: "Word Patterns"},
-        {en: "crazy about", uz: "...ning ashaddiy muhlisi", c: "Word Patterns"}, {en: "good at", uz: "...da yaxshi", c: "Word Patterns"},
-        {en: "interested in", uz: "...ga qiziqmoq", c: "Word Patterns"}, {en: "keen on", uz: "...ga qiziqmoq", c: "Word Patterns"},
-        {en: "popular with", uz: "...bilan mashhur", c: "Word Patterns"}, {en: "feel like", uz: "xohlamoq", c: "Word Patterns"},
-        {en: "listen to", uz: "tinglamoq", c: "Word Patterns"}, {en: "take part in", uz: "qatnashmoq", c: "Word Patterns"},
-        {en: "a book (by sb) about", uz: "...haqida kitob", c: "Word Patterns"}, {en: "a fan of", uz: "...ning muhlisi", c: "Word Patterns"},
-        {en: "a game against", uz: "...ga qarshi o'yin", c: "Word Patterns"}
+        // Topic Vocabulary (30)
+        {en:"achieve", uz:"erishmoq", c:"Topic Vocabulary"}, {en:"brain", uz:"miya", c:"Topic Vocabulary"}, {en:"clever", uz:"aqlli", c:"Topic Vocabulary"}, {en:"concentrate", uz:"fikrni jamlamoq", c:"Topic Vocabulary"}, {en:"consider", uz:"deb hisoblamoq", c:"Topic Vocabulary"}, {en:"course", uz:"kurs", c:"Topic Vocabulary"}, {en:"degree", uz:"daraja", c:"Topic Vocabulary"}, {en:"experience", uz:"tajriba (qilmoq)", c:"Topic Vocabulary"}, {en:"expert", uz:"o'z ishini ustasi", c:"Topic Vocabulary"}, {en:"fail", uz:"muvaffaqiyatsizlikka uchramoq", c:"Topic Vocabulary"}, {en:"guess", uz:"taxmin qilmoq", c:"Topic Vocabulary"}, {en:"hesitate", uz:"ikkilanmoq", c:"Topic Vocabulary"}, {en:"instruction", uz:"qo'llanma", c:"Topic Vocabulary"}, {en:"make progress", uz:"yuksalmoq", c:"Topic Vocabulary"}, {en:"make sure", uz:"ishonch hosil qilmoq", c:"Topic Vocabulary"}, {en:"mark", uz:"baholamoq / baho", c:"Topic Vocabulary"}, {en:"mental", uz:"aqliy", c:"Topic Vocabulary"}, {en:"pass", uz:"imtihondan o'tmoq", c:"Topic Vocabulary"}, {en:"qualification", uz:"malaka / tajriba", c:"Topic Vocabulary"}, {en:"remind", uz:"eslatmoq", c:"Topic Vocabulary"}, {en:"report", uz:"hisobot bermoq", c:"Topic Vocabulary"}, {en:"revise", uz:"qayta ko'rib chiqmoq", c:"Topic Vocabulary"}, {en:"search", uz:"qidirmoq", c:"Topic Vocabulary"}, {en:"skill", uz:"mahorat", c:"Topic Vocabulary"}, {en:"smart", uz:"aqlli (s)", c:"Topic Vocabulary"}, {en:"subject", uz:"fan", c:"Topic Vocabulary"}, {en:"take an exam", uz:"imtihon topshirmoq", c:"Topic Vocabulary"}, {en:"talented", uz:"talantli", c:"Topic Vocabulary"}, {en:"term", uz:"termin", c:"Topic Vocabulary"}, {en:"wonder", uz:"hayratlanmoq", c:"Topic Vocabulary"},
+        // Phrasal Verbs (8)
+        {en:"Cross out", uz:"yozuvni o'chirmoq (chizish)", c:"Phrasal Verbs"}, {en:"Look up", uz:"lug'atdan qidirmoq", c:"Phrasal Verbs"}, {en:"Point out", uz:"ta'kidlamoq", c:"Phrasal Verbs"}, {en:"Read out", uz:"ovoz chiqarib o'qimoq", c:"Phrasal Verbs"}, {en:"Rip up", uz:"yirtmoq", c:"Phrasal Verbs"}, {en:"Rub out", uz:"o'chirg'ich bilan o'chirmoq", c:"Phrasal Verbs"}, {en:"Turn over", uz:"o'girmoq (betni)", c:"Phrasal Verbs"}, {en:"Write down", uz:"yozmoq", c:"Phrasal Verbs"},
+        // Prepositional Phrases (6)
+        {en:"By heart", uz:"yurakdan (yoddan)", c:"Prepositional Phrases"}, {en:"For instance", uz:"masalan", c:"Prepositional Phrases"}, {en:"In conclusion", uz:"xulosada", c:"Prepositional Phrases"}, {en:"In fact", uz:"aslida", c:"Prepositional Phrases"}, {en:"In favour (of)", uz:"qo'llamoq", c:"Prepositional Phrases"}, {en:"In general", uz:"umuman olganda", c:"Prepositional Phrases"},
+        // Word Formation (28)
+        {en:"begin", uz:"boshlamoq", c:"Word Formation"}, {en:"began", uz:"begin (past simple)", c:"Word Formation"}, {en:"begun", uz:"begin (past participle)", c:"Word Formation"}, {en:"beginner", uz:"boshlovchi", c:"Word Formation"}, {en:"beginning", uz:"boshlanish", c:"Word Formation"}, {en:"brave", uz:"jasur", c:"Word Formation"}, {en:"bravery", uz:"jasurlik", c:"Word Formation"}, {en:"correct", uz:"to'g'ri", c:"Word Formation"}, {en:"correction", uz:"to'g'rilik (tuzatish)", c:"Word Formation"}, {en:"incorrect", uz:"noto'g'ri", c:"Word Formation"}, {en:"divide", uz:"bo'lmoq / taqsimlamoq", c:"Word Formation"}, {en:"division", uz:"taqsimlash", c:"Word Formation"}, {en:"educate", uz:"ta'lim bermoq", c:"Word Formation"}, {en:"education", uz:"ta'lim", c:"Word Formation"}, {en:"instruct", uz:"ko'rsatma bermoq", c:"Word Formation"}, {en:"instruction (wf)", uz:"ko'rsatma", c:"Word Formation"}, {en:"instructor", uz:"instruktor", c:"Word Formation"}, {en:"memory", uz:"xotira", c:"Word Formation"}, {en:"memorise", uz:"yodlamoq", c:"Word Formation"}, {en:"memorial", uz:"haykal / yodgorlik", c:"Word Formation"}, {en:"refer", uz:"ma'lumot bermoq", c:"Word Formation"}, {en:"reference", uz:"ma'lumotnoma", c:"Word Formation"}, {en:"silent", uz:"tinch", c:"Word Formation"}, {en:"silence", uz:"tinchlik", c:"Word Formation"}, {en:"silently", uz:"tinch holatda", c:"Word Formation"}, {en:"simple", uz:"sodda", c:"Word Formation"}, {en:"simplify", uz:"soddalashtirmoq", c:"Word Formation"}, {en:"simplicity", uz:"soddalik", c:"Word Formation"},
+        // Word Patterns (12)
+        {en:"Capable of", uz:"...ga qobiliyatli", c:"Word Patterns"}, {en:"Talented at", uz:"...da talantli", c:"Word Patterns"}, {en:"Cheat at/in", uz:"...da aldamoq", c:"Word Patterns"}, {en:"Confuse sth with", uz:"...bilan chalkashtirmoq", c:"Word Patterns"}, {en:"Continue with", uz:"...bilan davom etmoq", c:"Word Patterns"}, {en:"Cope with", uz:"uddalamoq", c:"Word Patterns"}, {en:"Help (sb) with", uz:"...bilan yordam bermoq", c:"Word Patterns"}, {en:"Know about", uz:"...haqida bilmoq", c:"Word Patterns"}, {en:"Learn about", uz:"...haqida o'rganmoq", c:"Word Patterns"}, {en:"Succeed in", uz:"...da muvaffaqiyat qozonmoq", c:"Word Patterns"}, {en:"An opinion about/of", uz:"...haqida fikr", c:"Word Patterns"}, {en:"A question about", uz:"...haqida savol", c:"Word Patterns"}
     ];
 
     let quiz = [], current = 0, score = 0, mode = '', answered = false;
-
-    // Mobil ovoz aktivatori - Bu juda muhim!
-    function wakeUpAudio() {
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance("");
-            window.speechSynthesis.speak(utterance);
-        }
-    }
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
     function startQuiz(m) {
-        wakeUpAudio(); // Foydalanuvchi tanlagan zahoti ovozni faollashtirish
-        mode = m;
-        score = 0; current = 0;
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('quiz-area').style.display = 'flex';
-        document.getElementById('mode-label').innerText = mode === 'uz-en' ? 'Inglizchasini toping:' : 'O\'zbekchasini toping:';
-        quiz = shuffle([...dictionary]);
+        if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance("")); }
+        mode = m; score = 0; current = 0; quiz = [...dictionary].sort(() => Math.random() - 0.5);
+        document.getElementById('start-screen').style.display = 'none'; document.getElementById('quiz-area').style.display = 'flex';
         render();
     }
-
     function render() {
-        answered = false;
-        const item = quiz[current];
+        answered = false; const item = quiz[current];
         document.getElementById('category').innerText = item.c;
         document.getElementById('counter').innerText = `${current + 1} / ${quiz.length}`;
         document.getElementById('progress').style.width = `${(current / quiz.length) * 100}%`;
         document.getElementById('q-text').innerText = mode === 'uz-en' ? item.uz : item.en;
-
-        const optBox = document.getElementById('options');
-        optBox.innerHTML = '';
-        
+        document.getElementById('score-info').innerText = `Ball: ${score}`;
         const correctVal = mode === 'uz-en' ? item.en : item.uz;
         let opts = [correctVal];
         while(opts.length < 4) {
@@ -228,71 +94,28 @@
             let v = mode === 'uz-en' ? r.en : r.uz;
             if(!opts.includes(v)) opts.push(v);
         }
-        
-        shuffle(opts).forEach(o => {
-            const b = document.createElement('button');
-            b.className = 'opt';
-            b.innerText = o;
-            // Mobil uchun click hodisasi
-            b.addEventListener('click', function(e) {
-                e.preventDefault();
-                if(!answered) checkAnswer(this, o, correctVal, item.en);
-            });
-            optBox.appendChild(b);
+        opts.sort(() => Math.random() - 0.5);
+        const optBox = document.getElementById('options');
+        optBox.innerHTML = '';
+        opts.forEach(o => {
+            const b = document.createElement('button'); b.className = 'opt'; b.innerText = o;
+            b.onclick = () => check(b, o, correctVal, item.en); optBox.appendChild(b);
         });
-        
-        document.getElementById('next-btn').style.display = 'none';
-        document.getElementById('btn-placeholder').style.display = 'block';
+        document.getElementById('next-btn').style.visibility = 'hidden';
     }
-
-    function checkAnswer(btn, selected, correct, speakWord) {
-        answered = true;
-        
-        // Barcha variantlarni o'chirish
-        const allOpts = document.querySelectorAll('.opt');
-        allOpts.forEach(x => x.style.pointerEvents = 'none');
-        
-        // Ovoz berish (Faqat inglizcha so'z uchun)
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(speakWord);
-            u.lang = 'en-US';
-            u.rate = 0.85;
-            window.speechSynthesis.speak(u);
-        }
-
-        if(selected === correct) {
-            btn.classList.add('correct');
-            score++;
-        } else {
-            btn.classList.add('wrong');
-            allOpts.forEach(x => {
-                if(x.innerText === correct) x.classList.add('correct');
-            });
-        }
-        
-        document.getElementById('score-info').innerText = `Ball: ${score}`;
-        document.getElementById('btn-placeholder').style.display = 'none';
-        document.getElementById('next-btn').style.display = 'block';
+    function check(btn, selected, correct, speakWord) {
+        if(answered) return; answered = true;
+        if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(speakWord); u.lang = 'en-US'; u.rate = 0.85; window.speechSynthesis.speak(u); }
+        if(selected === correct) { btn.classList.add('correct'); score++; } 
+        else { btn.classList.add('wrong'); document.querySelectorAll('.opt').forEach(x => { if(x.innerText === correct) x.classList.add('correct'); }); }
+        document.getElementById('score-info').innerText = `Ball: ${score}`; document.getElementById('next-btn').style.visibility = 'visible';
     }
-
-    function nextQuestion() {
-        current++;
-        if(current < quiz.length) render();
-        else showResults();
-    }
-
+    function nextQuestion() { current++; if(current < quiz.length) render(); else showResults(); }
     function showResults() {
-        const finalTotal = answered ? current + 1 : current;
-        const p = finalTotal === 0 ? 0 : Math.round((score/finalTotal)*100);
-        
+        const total = answered ? current + 1 : current; const p = total === 0 ? 0 : Math.round((score/total)*100);
         document.getElementById('quiz-area').innerHTML = `
-            <div class="result-box">
-                <h2 style="margin:0;">Test Yakunlandi</h2>
-                <div class="result-pct">${p}%</div>
-                <p style="font-weight:700; color:var(--secondary); margin-bottom:30px;">To'g'ri javoblar: ${score} / ${finalTotal}</p>
-                <button class="mode-btn" onclick="location.reload()" style="background:var(--p); color:white;">Qayta boshlash</button>
-            </div>`;
+            <div class="result-box"><div class="result-pct">${p}%</div><p style="font-weight:700; color:var(--secondary); margin-bottom:20px;">To'g'ri: ${score} / ${total}</p>
+            <button class="mode-btn" onclick="location.reload()" style="background:var(--p); color:white;">Qayta boshlash</button></div>`;
     }
 </script>
 </body>
